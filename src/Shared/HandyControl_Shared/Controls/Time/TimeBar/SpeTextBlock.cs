@@ -33,7 +33,7 @@ internal class SpeTextBlock : TextBlock
         set
         {
             _time = value;
-            Text = $"{value.ToString(TimeFormat)}\r\n|";
+            Text = $"{value.ToString(TimeFormat)}{Environment.CommandLine}|";
         }
     }
 
