@@ -237,4 +237,19 @@
   <data name="NoData" xml:space="preserve">
     <value>No Data</value>
   </data>
+  <data name="Today" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>Yesterday</value>
+  </data>
+  <data name="Tomorrow" xml:space="preserve">
+    <value>Tomorrow</value>
+  </data>
+  <data name="ThisWeek" xml:space="preserve">
+    <value>ThisWeek</value>
+  </data>
+  <data name="LastWeek" xml:space="preserve">
+    <value>LastWeek</value>
+  </data>
 </root>

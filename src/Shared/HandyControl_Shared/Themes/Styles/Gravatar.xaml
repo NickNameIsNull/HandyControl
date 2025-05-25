@@ -10,7 +10,16 @@
             <Setter.Value>
                 <ControlTemplate TargetType="hc:Gravatar">
                     <Border Style="{StaticResource BorderCircularClip}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                        <ContentPresenter Margin="{TemplateBinding Padding}"/>
+                        <ContentPresenter Margin="{TemplateBinding Padding}">
+                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

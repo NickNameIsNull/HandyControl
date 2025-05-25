@@ -12,7 +12,7 @@
         <Setter Property="Focusable" Value="False"/>
         <Setter Property="Width" Value="28"/>
         <Setter Property="Height" Value="28"/>
-        <Setter Property="Background" Value="{DynamicResource DangerBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource SuccessBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="hc:ClockRadioButton">
@@ -30,7 +30,22 @@
                     </ControlTemplate.Resources>
                     <hc:SimplePanel x:Name="templateRoot" Background="Transparent" SnapsToDevicePixels="True">
                         <Ellipse x:Name="optionMark" Fill="{TemplateBinding Background}" MinWidth="6" MinHeight="6" Opacity="0"/>
-                        <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        <ContentPresenter x:Name="contentPresenter"
+                                          Focusable="False"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}"
+                                          RecognizesAccessKey="True"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=hc:ClockRadioButton}}" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                     </hc:SimplePanel>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="true">
@@ -64,7 +79,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="hc:Clock">
-                    <hc:SimplePanel Margin="0,4,0,8" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <!--<hc:SimplePanel Margin="0,4,0,8" HorizontalAlignment="Center" VerticalAlignment="Center">-->
+                    <!-- Flag Syncfusion HandyControl StyleCodeConflict Clock -->
+                    <hc:SimplePanel Margin="0,4,0,8" HorizontalAlignment="Center" VerticalAlignment="Stretch">
                         <Border CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Effect="{StaticResource EffectShadow2}"/>
                         <Grid>
                             <Grid.RowDefinitions>
@@ -95,7 +112,260 @@
         </Setter>
     </Style>
 
-    <Style TargetType="hc:Clock" BasedOn="{StaticResource ClockBaseStyle}"/>
+    <!--样式扩展：始终下拉时间列表样式-->
+    <Style x:Key="ClockListTimeStyle"
+           TargetType="hc:Clock">
+        <Setter Property="BorderThickness"
+                Value="0" />
+        <Setter Property="Margin"
+                Value="8,0" />
+        <Setter Property="Focusable"
+                Value="False" />
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource BorderBrush}" />
+        <Setter Property="Background"
+                Value="{DynamicResource RegionBrush}" />
+        <Setter Property="ClockRadioButtonStyle"
+                Value="{StaticResource ClockRadioButtonStyle}" />
+        <Setter Property="hc:TitleElement.Background"
+                Value="{DynamicResource TitleBrush}" />
+        <Setter Property="hc:BorderElement.CornerRadius"
+                Value="{StaticResource DefaultCornerRadius}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="hc:Clock">
+                    <hc:SimplePanel Margin="0,4,0,8"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"
+                                Effect="{StaticResource EffectShadow2}" />
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="50" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Border Name="PART_BorderTitle"
+                                    Grid.ColumnSpan="3"
+                                    Margin="4"
+                                    Background="{Binding Path=(hc:TitleElement.Background), RelativeSource={RelativeSource TemplatedParent}}"
+                                    CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Border Grid.Column="0"
+                                            Width="{Binding ElementName=PART_ListClockToggleButton, Path=ActualWidth}" />
+                                    <TextBlock x:Name="PART_TimeStr"
+                                               Grid.Column="1"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               FontSize="20"
+                                               Foreground="{DynamicResource TextIconBrush}" />
+                                    <ToggleButton x:Name="PART_ListClockToggleButton"
+                                                  Grid.Column="1"
+                                                  Grid.ColumnSpan="2"
+                                                  HorizontalAlignment="Right"
+                                                  hc:IconSwitchElement.Geometry="{StaticResource DownGeometry}"
+                                                  hc:IconSwitchElement.GeometrySelected="{StaticResource UpGeometry}"
+                                                  Background="Transparent"
+                                                  BorderBrush="Transparent"
+                                                  Cursor="Hand"
+                                                  Foreground="{StaticResource TextIconBrush}"
+                                                  Style="{StaticResource ToggleButtonIcon}" />
+                                </Grid>
+
+                            </Border>
+                            <Popup x:Name="PART_ListClockPopup"
+                                   AllowsTransparency="True"
+                                   HorizontalOffset="-4"
+                                   IsOpen="{Binding ElementName=PART_ListClockToggleButton, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Path=IsChecked}"
+                                   PlacementTarget="{Binding ElementName=PART_BorderTitle}"
+                                   StaysOpen="False">
+                                <Border Background="{StaticResource DarkOpacityBrush}"
+                                        CornerRadius="{StaticResource DefaultCornerRadius}">
+                                    <Grid Margin="5,14"
+                                          Background="{StaticResource RegionBrush}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto" />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Button Name="PART_TimeStart"
+                                                Grid.Column="0"
+                                                Height="35"
+                                                HorizontalAlignment="Stretch"
+                                                VerticalAlignment="Bottom"
+                                                hc:BorderElement.CornerRadius="4,0,0,0"
+                                                BorderThickness="0,0,0,0"
+                                                Content="{ex:Lang Key={x:Static langs:LangKeys.DayTimeBegin}}"
+                                                Cursor="Hand"
+                                                Foreground="{StaticResource PrimaryBrush}"
+                                                Style="{StaticResource ButtonBaseStyle}" />
+                                        <Button Name="PART_TimeNow"
+                                                Grid.Column="1"
+                                                Height="35"
+                                                HorizontalAlignment="Stretch"
+                                                VerticalAlignment="Bottom"
+                                                hc:BorderElement.CornerRadius="4,0,0,0"
+                                                BorderThickness="0,0,0,0"
+                                                Content="{ex:Lang Key={x:Static langs:LangKeys.DayTimeNow}}"
+                                                Cursor="Hand"
+                                                Foreground="{StaticResource SuccessBrush}"
+                                                Style="{StaticResource ButtonBaseStyle}" />
+                                        <Button Name="PART_TimeEnd"
+                                                Grid.Column="2"
+                                                Height="35"
+                                                HorizontalAlignment="Stretch"
+                                                VerticalAlignment="Bottom"
+                                                hc:BorderElement.CornerRadius="0,4,0,0"
+                                                BorderThickness="0"
+                                                Content="{ex:Lang Key={x:Static langs:LangKeys.DayTimeEnd}}"
+                                                Cursor="Hand"
+                                                Foreground="{StaticResource PrimaryBrush}"
+                                                Style="{StaticResource ButtonBaseStyle}" />
+                                        <ContentPresenter Name="PART_ListClockPresenter"
+                                                          Grid.Row="1"
+                                                          Grid.ColumnSpan="3"
+                                                          Width="200"
+                                                          Margin="0"
+                                                          hc:BorderElement.CornerRadius="0,0,4,4" />
+
+                                    </Grid>
+                                </Border>
+                            </Popup>
+                            <Button Name="PART_ClockTimeStart"
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Width="90"
+                                    Height="30"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    BorderThickness="0"
+                                    Content="{ex:Lang Key={x:Static langs:LangKeys.DayTimeBegin}}"
+                                    Cursor="Hand"
+                                    Foreground="{StaticResource PrimaryBrush}"
+                                    Style="{StaticResource ButtonBaseStyle}" />
+                            <Button Name="PART_ClockTimeNow"
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Width="90"
+                                    Height="30"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    BorderThickness="0"
+                                    Content="{ex:Lang Key={x:Static langs:LangKeys.DayTimeNow}}"
+                                    Cursor="Hand"
+                                    Foreground="{StaticResource SuccessBrush}"
+                                    Style="{StaticResource ButtonBaseStyle}" />
+                            <Button Name="PART_ClockTimeEnd"
+                                    Grid.Row="1"
+                                    Grid.Column="2"
+                                    Width="90"
+                                    Height="30"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    BorderThickness="0"
+                                    Content="{ex:Lang Key={x:Static langs:LangKeys.DayTimeEnd}}"
+                                    Cursor="Hand"
+                                    Foreground="{StaticResource PrimaryBrush}"
+                                    Style="{StaticResource ButtonBaseStyle}" />
+                            <Canvas Name="PART_Canvas"
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="3"
+                                    Width="178"
+                                    Height="178"
+                                    Margin="16,46,16,62"
+                                    VerticalAlignment="Top">
+                                <Border Width="178"
+                                        Height="178"
+                                        Background="{DynamicResource SecondaryRegionBrush}"
+                                        CornerRadius="89" />
+                                <hc:CirclePanel x:Name="PART_PanelNum"
+                                                Margin="24,24,0,0"
+                                                Diameter="130"
+                                                KeepVertical="True"
+                                                OffsetAngle="-60" />
+                                <Border Name="PART_BorderClock"
+                                        Canvas.Left="88"
+                                        Canvas.Top="26"
+                                        Width="2"
+                                        Height="63"
+                                        Background="{DynamicResource PrimaryBrush}"
+                                        Cursor="Hand"
+                                        Focusable="False"
+                                        RenderTransformOrigin="0.5,1" />
+                                <Ellipse Canvas.Left="85"
+                                         Canvas.Top="85"
+                                         Width="8"
+                                         Height="8"
+                                         Fill="White"
+                                         Stroke="{DynamicResource PrimaryBrush}"
+                                         StrokeThickness="2" />
+                            </Canvas>
+                            <hc:ClockRadioButton x:Name="PART_ButtonAm"
+                                                 Grid.Row="1"
+                                                 Grid.Column="0"
+                                                 Width="30"
+                                                 Height="30"
+                                                 Margin="16,0,0,16"
+                                                 HorizontalAlignment="Left"
+                                                 VerticalAlignment="Bottom"
+                                                 Cursor="Hand"
+                                                 Background="{DynamicResource PrimaryBrush}"
+                                                 Content="{ex:Lang Key={x:Static langs:LangKeys.Am}}"
+                                                 IsChecked="True"
+                                                 Style="{StaticResource ClockRadioButtonStyle}" />
+                            <hc:ClockRadioButton x:Name="PART_ButtonPm"
+                                                 Grid.Row="1"
+                                                 Grid.Column="2"
+                                                 Width="30"
+                                                 Height="30"
+                                                 Margin="0,0,16,16"
+                                                 HorizontalAlignment="Right"
+                                                 VerticalAlignment="Bottom"
+                                                 Cursor="Hand"
+                                                 Background="{DynamicResource PrimaryBrush}"
+                                                 Content="{ex:Lang Key={x:Static langs:LangKeys.Pm}}"
+                                                 Style="{StaticResource ClockRadioButtonStyle}" />
+                            <Button Name="PART_ButtonConfirm"
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Width="60"
+                                    Height="24"
+                                    Margin="0,0,0,19"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Bottom"
+                                    Background="Transparent"
+                                    Content="{ex:Lang Key={x:Static langs:LangKeys.Confirm}}"
+                                    Cursor="Hand"
+                                    Foreground="{DynamicResource PrimaryBrush}"
+                                    Style="{StaticResource ButtonCustom}"
+                                    Visibility="{TemplateBinding ShowConfirmButton,
+                                                                 Converter={StaticResource Boolean2VisibilityConverter}}" />
+                        </Grid>
+                    </hc:SimplePanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--<Style TargetType="hc:Clock" BasedOn="{StaticResource ClockBaseStyle}"/>-->
+    <Style TargetType="hc:Clock" BasedOn="{StaticResource ClockListTimeStyle}" />
 
     <Style x:Key="ClockListBoxItemStyle" TargetType="ListBoxItem" BasedOn="{StaticResource ListBoxItemBaseStyle}">
         <Style.Triggers>
@@ -116,7 +386,19 @@
                             <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
                                 <StackPanel Orientation="Horizontal">
                                     <ContentControl Width="16" Height="16" Content="{Binding Path=(hc:EdgeElement.LeftContent),RelativeSource={RelativeSource TemplatedParent}}"/>
-                                    <ContentPresenter Margin="6,0,0,0" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                    <ContentPresenter Margin="6,0,0,0"
+                                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                        <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                        <ContentPresenter.Resources>
+                                            <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                                   TargetType="TextBlock">
+                                                <Setter Property="Foreground"
+                                                        Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                            </Style>
+                                        </ContentPresenter.Resources>
+                                    </ContentPresenter>
                                 </StackPanel>
                             </Border>
                         </ControlTemplate>
@@ -145,7 +427,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="hc:ListClock">
-                    <hc:SimplePanel Margin="0,4,0,8" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <!--<hc:SimplePanel Margin="0,4,0,8" HorizontalAlignment="Center" VerticalAlignment="Center">-->
+                    <!-- Flag Syncfusion HandyControl StyleCodeConflict Clock -->
+                    <hc:SimplePanel Margin="0,4,0,8" HorizontalAlignment="Center" VerticalAlignment="Stretch">
                         <Border CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Effect="{StaticResource EffectShadow2}"/>
                         <Grid Margin="0,4" Width="210">
                             <Grid.ColumnDefinitions>

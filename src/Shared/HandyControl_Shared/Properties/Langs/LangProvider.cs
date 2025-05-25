@@ -279,6 +279,114 @@ public class LangProvider : INotifyPropertyChanged
     /// </summary>
     public string ZoomOut => Lang.ZoomOut;
 
+    #region Flag 日历控件增强
+
+    /// <summary>
+    /// 查找类似 今天 的本地化字符串
+    /// </summary>
+    public string Today => Lang.Today;
+
+    /// <summary>
+    /// 查找类似 昨天 的本地化字符串
+    /// </summary>
+    public string Yesterday => Lang.Yesterday;
+
+    /// <summary>
+    /// 查找类似 明天 的本地化字符串
+    /// </summary>
+    public string Tomorrow => Lang.Tomorrow;
+
+    /// <summary>
+    /// 查找类似 本周 的本地化字符串
+    /// </summary>
+    public string ThisWeek => Lang.ThisWeek;
+
+    /// <summary>
+    /// 查找类似 上周 的本地化字符串
+    /// </summary>
+    public string LastWeek => Lang.LastWeek;
+
+    /// <summary>
+    /// 查找类似 下周 的本地化字符串
+    /// </summary>
+    public string NextWeek => Lang.NextWeek;
+
+    /// <summary>
+    /// 查找类似 周一 的本地化字符串
+    /// </summary>
+    public string Monday => Lang.Monday;
+
+    /// <summary>
+    /// 查找类似 周日 的本地化字符串
+    /// </summary>
+    public string Sunday => Lang.Sunday;
+
+    /// <summary>
+    /// 查找类似 本月 的本地化字符串
+    /// </summary>
+    public string ThisMonth => Lang.ThisMonth;
+
+    /// <summary>
+    /// 查找类似 上月 的本地化字符串
+    /// </summary>
+    public string LastMonth => Lang.LastMonth;
+
+    /// <summary>
+    /// 查找类似 下月 的本地化字符串
+    /// </summary>
+    public string NextMonth => Lang.NextMonth;
+
+    /// <summary>
+    /// 查找类似 月初 的本地化字符串
+    /// </summary>
+    public string MonthBegin => Lang.MonthBegin;
+
+    /// <summary>
+    /// 查找类似 月末 的本地化字符串
+    /// </summary>
+    public string MonthEnd => Lang.MonthEnd;
+
+    /// <summary>
+    /// 查找类似 今年 的本地化字符串
+    /// </summary>
+    public string ThisYear => Lang.ThisYear;
+
+    /// <summary>
+    /// 查找类似 去年 的本地化字符串
+    /// </summary>
+    public string LastYear => Lang.LastYear;
+
+    /// <summary>
+    /// 查找类似 明年 的本地化字符串
+    /// </summary>
+    public string NextYear => Lang.NextYear;
+
+    /// <summary>
+    /// 查找类似 年初 的本地化字符串
+    /// </summary>
+    public string YearBegin => Lang.YearBegin;
+
+    /// <summary>
+    /// 查找类似 年末 的本地化字符串
+    /// </summary>
+    public string YearEnd => Lang.YearEnd;
+
+        /// <summary>
+    /// 查找类似 00:00:00 的本地化字符串
+    /// </summary>
+    public string DayTimeBegin => Lang.DayTimeBegin;
+
+    /// <summary>
+    /// 查找类似 当前时间 的本地化字符串
+    /// </summary>
+    public string DayTimeNow => Lang.DayTimeNow;
+
+    /// <summary>
+    /// 查找类似 23:59:59 的本地化字符串
+    /// </summary>
+    public string DayTimeEnd => Lang.DayTimeEnd;
+    #endregion Flag 日历控件增强
+
 
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -487,5 +595,113 @@ public class LangKeys
     ///   查找类似 缩小 的本地化字符串。
     /// </summary>
     public static string ZoomOut = nameof(ZoomOut);
+
+    #region Flag 日历控件增强
+
+    /// <summary>
+    /// 查找类似 今天 的本地化字符串
+    /// </summary>
+    public static string Today => nameof(Today);
+
+    /// <summary>
+    /// 查找类似 昨天 的本地化字符串
+    /// </summary>
+    public static string Yesterday => nameof(Yesterday);
+
+    /// <summary>
+    /// 查找类似 明天 的本地化字符串
+    /// </summary>
+    public static string Tomorrow => nameof(Tomorrow);
+
+    /// <summary>
+    /// 查找类似 本周 的本地化字符串
+    /// </summary>
+    public static string ThisWeek => nameof(ThisWeek);
+
+    /// <summary>
+    /// 查找类似 上周 的本地化字符串
+    /// </summary>
+    public static string LastWeek => nameof(LastWeek);
+
+    /// <summary>
+    /// 查找类似 下周 的本地化字符串
+    /// </summary>
+    public static string NextWeek => nameof(NextWeek);
+
+    /// <summary>
+    /// 查找类似 周一 的本地化字符串
+    /// </summary>
+    public static string Monday => nameof(Monday);
+
+    /// <summary>
+    /// 查找类似 周日 的本地化字符串
+    /// </summary>
+    public static string Sunday => nameof(Sunday);
+
+    /// <summary>
+    /// 查找类似 本月 的本地化字符串
+    /// </summary>
+    public static string ThisMonth => nameof(ThisMonth);
+
+    /// <summary>
+    /// 查找类似 上月 的本地化字符串
+    /// </summary>
+    public static string LastMonth => nameof(LastMonth);
+
+    /// <summary>
+    /// 查找类似 下月 的本地化字符串
+    /// </summary>
+    public static string NextMonth => nameof(NextMonth);
+
+    /// <summary>
+    /// 查找类似 月初 的本地化字符串
+    /// </summary>
+    public static string MonthBegin => nameof(MonthBegin);
+
+    /// <summary>
+    /// 查找类似 月末 的本地化字符串
+    /// </summary>
+    public static string MonthEnd => nameof(MonthEnd);
+
+    /// <summary>
+    /// 查找类似 今年 的本地化字符串
+    /// </summary>
+    public static string ThisYear => nameof(ThisYear);
+
+    /// <summary>
+    /// 查找类似 去年 的本地化字符串
+    /// </summary>
+    public static string LastYear => nameof(LastYear);
+
+    /// <summary>
+    /// 查找类似 明年 的本地化字符串
+    /// </summary>
+    public static string NextYear => nameof(NextYear);
+
+    /// <summary>
+    /// 查找类似 年初 的本地化字符串
+    /// </summary>
+    public static string YearBegin => nameof(YearBegin);
+
+    /// <summary>
+    /// 查找类似 年末 的本地化字符串
+    /// </summary>
+    public static string YearEnd => nameof(YearEnd);
+
+    /// <summary>
+    /// 查找类似 00:00:00 的本地化字符串
+    /// </summary>
+    public static string DayTimeBegin => nameof(DayTimeBegin);
+
+    /// <summary>
+    /// 查找类似 当前时间 的本地化字符串
+    /// </summary>
+    public static string DayTimeNow => nameof(DayTimeNow);
+
+    /// <summary>
+    /// 查找类似 23:59:59 的本地化字符串
+    /// </summary>
+    public static string DayTimeEnd => nameof(DayTimeEnd);
+    #endregion Flag 日历控件增强
 
 }

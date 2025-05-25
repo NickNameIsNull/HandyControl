@@ -105,7 +105,22 @@
                 </Grid.RowDefinitions>
                 <DockPanel KeyboardNavigation.TabIndex="1" KeyboardNavigation.TabNavigation="Local">
                     <Thumb x:Name="ToolBarThumb" DockPanel.Dock="Top" Style="{StaticResource ToolBarThumbVerticalStyle}" Height="10" Margin="0 4 0 0" />
-                    <ContentPresenter x:Name="ToolBarHeader" DockPanel.Dock="Top" ContentSource="Header" HorizontalAlignment="Center" Margin="4 4 4 0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center" />
+                    <ContentPresenter x:Name="ToolBarHeader"
+                                      DockPanel.Dock="Top"
+                                      ContentSource="Header"
+                                      HorizontalAlignment="Center"
+                                      Margin="4 4 4 0"
+                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                      VerticalAlignment="Center">
+                        <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                        <ContentPresenter.Resources>
+                            <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                   TargetType="TextBlock">
+                                <Setter Property="Foreground"
+                                        Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                            </Style>
+                        </ContentPresenter.Resources>
+                    </ContentPresenter>
                     <ToolBarPanel x:Name="PART_ToolBarPanel" IsItemsHost="true" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Margin="{TemplateBinding Padding}" />
                 </DockPanel>
                 <ToggleButton x:Name="ButtonOverflow" Margin="2 0 2 2" Padding="6 4" HorizontalContentAlignment="Right" hc:IconElement.Height="8" hc:IconSwitchElement.GeometrySelected="{StaticResource LeftGeometry}" hc:IconElement.Geometry="{StaticResource RightGeometry}" Style="{StaticResource ToolBarOverflowButtonStyle}" Grid.Row="1" IsChecked="{Binding IsOverflowOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" IsEnabled="{TemplateBinding HasOverflowItems}" />
@@ -138,7 +153,21 @@
                 </Grid.ColumnDefinitions>
                 <DockPanel KeyboardNavigation.TabIndex="1" KeyboardNavigation.TabNavigation="Local">
                     <Thumb x:Name="ToolBarThumb" Style="{StaticResource ToolBarThumbHorizontalStyle}" Width="10" Margin="4 0 0 0" />
-                    <ContentPresenter x:Name="ToolBarHeader" ContentSource="Header" HorizontalAlignment="Center" Margin="4 4 0 4" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center" />
+                    <ContentPresenter x:Name="ToolBarHeader"
+                                      ContentSource="Header"
+                                      HorizontalAlignment="Center"
+                                      Margin="4 4 0 4"
+                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                      VerticalAlignment="Center">
+                        <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                        <ContentPresenter.Resources>
+                            <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                   TargetType="TextBlock">
+                                <Setter Property="Foreground"
+                                        Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                            </Style>
+                        </ContentPresenter.Resources>
+                    </ContentPresenter>
                     <ToolBarPanel x:Name="PART_ToolBarPanel" IsItemsHost="true" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Margin="{TemplateBinding Padding}" />
                 </DockPanel>
                 <ToggleButton x:Name="ButtonOverflow" Margin="0 2 2 2" Padding="4 6" VerticalContentAlignment="Bottom" hc:IconElement.Width="8" hc:IconSwitchElement.GeometrySelected="{StaticResource UpGeometry}" hc:IconElement.Geometry="{StaticResource DownGeometry}" Style="{StaticResource ToolBarOverflowButtonStyle}" Grid.Column="1" IsChecked="{Binding IsOverflowOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" IsEnabled="{TemplateBinding HasOverflowItems}" />

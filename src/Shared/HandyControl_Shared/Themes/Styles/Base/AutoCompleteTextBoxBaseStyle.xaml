@@ -15,7 +15,18 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBoxItem">
                     <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
-                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                     </Border>
                     <ControlTemplate.Triggers>
                         <MultiTrigger>

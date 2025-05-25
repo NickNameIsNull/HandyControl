@@ -27,7 +27,20 @@
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="{TemplateBinding Padding}">
                                     <Path x:Name="PathMain" Width="{TemplateBinding hc:IconElement.Width}" Height="{TemplateBinding hc:IconElement.Height}" Fill="{TemplateBinding Foreground}" SnapsToDevicePixels="True" Stretch="Uniform" Data="{TemplateBinding hc:IconElement.Geometry}"/>
-                                    <ContentPresenter x:Name="ContentPresenterMain" RecognizesAccessKey="True" VerticalAlignment="Center" Margin="6,0,0,0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                    <ContentPresenter x:Name="ContentPresenterMain"
+                                                      RecognizesAccessKey="True"
+                                                      VerticalAlignment="Center"
+                                                      Margin="6,0,0,0"
+                                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                        <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                        <ContentPresenter.Resources>
+                                            <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                                   TargetType="TextBlock">
+                                                <Setter Property="Foreground"
+                                                        Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                            </Style>
+                                        </ContentPresenter.Resources>
+                                    </ContentPresenter>
                                 </StackPanel>
                                 <ToggleButton x:Name="PART_Arrow" hc:IconElement.Width="14" Padding="{Binding Padding, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource ThicknessSplitConverter}, ConverterParameter='0,1,1,1'}" Foreground="{TemplateBinding Foreground}" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Height="Auto" Width="Auto" Grid.Column="1" Style="{StaticResource ToggleButtonIconTransparent}" hc:IconSwitchElement.GeometrySelected="{StaticResource UpGeometry}" hc:IconElement.Geometry="{StaticResource DownGeometry}"/>
                             </Grid>
@@ -39,7 +52,16 @@
                                         <Canvas HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
                                             <Rectangle x:Name="opaqueRect" Fill="{Binding Background, ElementName=dropDownBorder}" Height="{Binding ActualHeight, ElementName=dropDownBorder}" Width="{Binding ActualWidth, ElementName=dropDownBorder}"/>
                                         </Canvas>
-                                        <ContentPresenter ContentSource="DropDownContent"/>
+                                        <ContentPresenter ContentSource="DropDownContent">
+                                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                            <ContentPresenter.Resources>
+                                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                                       TargetType="TextBlock">
+                                                    <Setter Property="Foreground"
+                                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                                </Style>
+                                            </ContentPresenter.Resources>
+                                        </ContentPresenter>
                                     </hc:SimplePanel>
                                 </ScrollViewer>
                             </Border>

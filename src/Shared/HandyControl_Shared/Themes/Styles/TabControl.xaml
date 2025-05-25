@@ -18,7 +18,24 @@
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
                     <Border CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{DynamicResource BorderBrush}" Background="{TemplateBinding Background}">
-                        <ContentPresenter x:Name="contentPresenter" ContentSource="Header" HorizontalAlignment="Center" VerticalAlignment="Center" TextElement.Foreground="{TemplateBinding Foreground}" Focusable="False" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        <ContentPresenter x:Name="contentPresenter"
+                                          ContentSource="Header"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          TextElement.Foreground="{TemplateBinding Foreground}"
+                                          Focusable="False"
+                                          Margin="{TemplateBinding Padding}"
+                                          RecognizesAccessKey="True"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -61,7 +78,19 @@
                             <StackPanel x:Name="headerPanel" KeyboardNavigation.TabNavigation="Once" KeyboardNavigation.DirectionalNavigation="Cycle" Orientation="Horizontal" Background="Transparent" Margin="0" IsItemsHost="True" />
                         </hc:SlidingTabContainer>
                         <Border x:Name="contentPanel" Margin="0,6,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{DynamicResource BorderBrush}" Grid.Column="0" Grid.Row="1">
-                            <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            <ContentPresenter x:Name="PART_SelectedContentHost"
+                                              ContentSource="SelectedContent"
+                                              Margin="0"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                <ContentPresenter.Resources>
+                                    <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                           TargetType="TextBlock">
+                                        <Setter Property="Foreground"
+                                                Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                    </Style>
+                                </ContentPresenter.Resources>
+                            </ContentPresenter>
                         </Border>
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -122,7 +151,19 @@
                         </Grid.RowDefinitions>
                         <UniformGrid Rows="1" x:Name="headerPanel" KeyboardNavigation.TabNavigation="Once" KeyboardNavigation.DirectionalNavigation="Cycle" Background="Transparent" Grid.Column="0" IsItemsHost="true" Margin="0" Grid.Row="0"/>
                         <Border x:Name="contentPanel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{DynamicResource BorderBrush}" Background="{TemplateBinding Background}" Grid.Column="0" Grid.Row="1">
-                            <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            <ContentPresenter x:Name="PART_SelectedContentHost"
+                                              ContentSource="SelectedContent"
+                                              Margin="0"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                <ContentPresenter.Resources>
+                                    <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                           TargetType="TextBlock">
+                                        <Setter Property="Foreground"
+                                                Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                    </Style>
+                                </ContentPresenter.Resources>
+                            </ContentPresenter>
                         </Border>
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -212,7 +253,19 @@
                         </Grid.RowDefinitions>
                         <UniformGrid Rows="1" KeyboardNavigation.TabNavigation="Once" KeyboardNavigation.DirectionalNavigation="Cycle" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="headerPanel" Background="Transparent" Grid.Column="0" IsItemsHost="true" Margin="0" Grid.Row="0"/>
                         <Border x:Name="contentPanel" Margin="0,6,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" Grid.Column="0" Grid.Row="1">
-                            <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            <ContentPresenter x:Name="PART_SelectedContentHost"
+                                              ContentSource="SelectedContent"
+                                              Margin="0"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                <ContentPresenter.Resources>
+                                    <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                           TargetType="TextBlock">
+                                        <Setter Property="Foreground"
+                                                Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                    </Style>
+                                </ContentPresenter.Resources>
+                            </ContentPresenter>
                         </Border>
                     </Grid>
                     <ControlTemplate.Triggers>

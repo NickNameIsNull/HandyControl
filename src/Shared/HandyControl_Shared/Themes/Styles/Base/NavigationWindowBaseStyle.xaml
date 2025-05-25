@@ -35,7 +35,17 @@
                             </Border>
                             <hc:SimplePanel>
                                 <AdornerDecorator>
-                                    <ContentPresenter x:Name="PART_NavWinCP" ClipToBounds="true"/>
+                                    <ContentPresenter x:Name="PART_NavWinCP"
+                                                      ClipToBounds="true">
+                                        <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                        <ContentPresenter.Resources>
+                                            <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                                   TargetType="TextBlock">
+                                                <Setter Property="Foreground"
+                                                        Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                            </Style>
+                                        </ContentPresenter.Resources>
+                                    </ContentPresenter>
                                 </AdornerDecorator>
                                 <ResizeGrip x:Name="WindowResizeGrip" HorizontalAlignment="Right" IsTabStop="false" Visibility="Collapsed" VerticalAlignment="Bottom"/>
                             </hc:SimplePanel>

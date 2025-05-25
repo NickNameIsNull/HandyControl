@@ -17,7 +17,19 @@
                             <Line VerticalAlignment="Center" StrokeDashArray="{TemplateBinding LineStrokeDashArray}" Stroke="{TemplateBinding LineStroke}" X2="1" StrokeThickness="{TemplateBinding LineStrokeThickness}" Stretch="Fill" StrokeEndLineCap="Square" StrokeStartLineCap="Square"/>
                         </hc:Col>
                         <hc:Col IsFixed="True">
-                            <ContentPresenter Margin="{TemplateBinding Padding}" ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" ContentStringFormat="{TemplateBinding ContentStringFormat}" ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                            <ContentPresenter Margin="{TemplateBinding Padding}"
+                                              ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
+                                              ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}">
+                                <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                <ContentPresenter.Resources>
+                                    <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                           TargetType="TextBlock">
+                                        <Setter Property="Foreground"
+                                                Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                    </Style>
+                                </ContentPresenter.Resources>
+                            </ContentPresenter>
                         </hc:Col>
                         <hc:Col Layout="12" x:Name="ColEnd">
                             <Line VerticalAlignment="Center" StrokeDashArray="{TemplateBinding LineStrokeDashArray}" Stroke="{TemplateBinding LineStroke}" X2="1" StrokeThickness="{TemplateBinding LineStrokeThickness}" Stretch="Fill" StrokeEndLineCap="Square" StrokeStartLineCap="Square"/>

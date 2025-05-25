@@ -188,4 +188,99 @@ public static class ControlCommands
     public static RoutedCommand More { get; } = new(nameof(More), typeof(ControlCommands));
 
     public static RoutedCommand Toggle { get; } = new(nameof(Toggle), typeof(ControlCommands));
+
+    #region Flag 日历扩展
+    /// <summary>
+    ///     今天
+    /// </summary>
+    public static RoutedCommand Today { get; } = new(nameof(Today), typeof(ControlCommands));
+
+    /// <summary>
+    ///     昨天
+    /// </summary>
+    public static RoutedCommand Yesterday { get; } = new(nameof(Yesterday), typeof(ControlCommands));
+
+    /// <summary>
+    ///     明天
+    /// </summary>
+    public static RoutedCommand Tomorrow { get; } = new(nameof(Tomorrow), typeof(ControlCommands));
+
+    /// <summary>
+    ///     周一
+    /// </summary>
+    public static RoutedCommand FirstDayOfWeek { get; } = new(nameof(FirstDayOfWeek), typeof(ControlCommands));
+
+    /// <summary>
+    ///     本周
+    /// </summary>
+    public static RoutedCommand ThisWeek { get; } = new(nameof(ThisWeek), typeof(ControlCommands));
+
+    /// <summary>
+    ///     上周
+    /// </summary>
+    public static RoutedCommand PrevWeek { get; } = new(nameof(PrevWeek), typeof(ControlCommands));
+
+
+    /// <summary>
+    ///     下周
+    /// </summary>
+    public static RoutedCommand NextWeek { get; } = new(nameof(NextWeek), typeof(ControlCommands));
+
+    /// <summary>
+    ///     周末
+    /// </summary>
+    public static RoutedCommand LastDayOfWeek { get; } = new(nameof(LastDayOfWeek), typeof(ControlCommands));
+
+    /// <summary>
+    ///     月初
+    /// </summary>
+    public static RoutedCommand FirstDayOfMonth { get; } = new(nameof(FirstDayOfMonth), typeof(ControlCommands));
+
+    /// <summary>
+    ///     本月
+    /// </summary>
+    public static RoutedCommand ThisMonth { get; } = new(nameof(ThisMonth), typeof(ControlCommands));
+
+    /// <summary>
+    ///     上月
+    /// </summary>
+    public static RoutedCommand PrevMonth { get; } = new(nameof(PrevMonth), typeof(ControlCommands));
+
+    /// <summary>
+    ///     下月
+    /// </summary>
+    public static RoutedCommand NextMonth { get; } = new(nameof(NextMonth), typeof(ControlCommands));
+
+    /// <summary>
+    ///     月末
+    /// </summary>
+    public static RoutedCommand LastDayOfMonth { get; } = new(nameof(LastDayOfMonth), typeof(ControlCommands));
+
+    /// <summary>
+    ///     年初
+    /// </summary>
+    public static RoutedCommand FirstDayOfYear { get; } = new(nameof(FirstDayOfYear), typeof(ControlCommands));
+
+    /// <summary>
+    ///     今年
+    /// </summary>
+    public static RoutedCommand ThisYear { get; } = new(nameof(ThisYear), typeof(ControlCommands));
+
+
+    /// <summary>
+    ///     去年
+    /// </summary>
+    public static RoutedCommand PrevYear { get; } = new(nameof(PrevYear), typeof(ControlCommands));
+
+
+    /// <summary>
+    ///     明年
+    /// </summary>
+    public static RoutedCommand NextYear { get; } = new(nameof(NextYear), typeof(ControlCommands));
+
+    /// <summary>
+    ///     年末
+    /// </summary>
+    public static RoutedCommand LastDayOfYear { get; } = new(nameof(LastDayOfYear), typeof(ControlCommands));
+    #endregion 日历扩展
 }

@@ -28,8 +28,38 @@
                     <Border x:Name="Chrome" CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}">
                         <hc:SimplePanel>
                             <ProgressBar x:Name="ProgressBar" Height="Auto" Value="{TemplateBinding Progress}" Maximum="100" Visibility="Collapsed" Style="{TemplateBinding ProgressStyle}"/>
-                            <ContentPresenter Name="UnCheckedElement"  Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                            <ContentPresenter Name="CheckedElement" Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Visibility="Collapsed" Content="{Binding Path=(hc:StatusSwitchElement.CheckedElement),RelativeSource={RelativeSource TemplatedParent}}"/>
+                            <ContentPresenter Name="UnCheckedElement"
+                                              Margin="{TemplateBinding Padding}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              RecognizesAccessKey="True"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                <ContentPresenter.Resources>
+                                    <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                           TargetType="TextBlock">
+                                        <Setter Property="Foreground"
+                                                Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                    </Style>
+                                </ContentPresenter.Resources>
+                            </ContentPresenter>
+                            <ContentPresenter Name="CheckedElement"
+                                              Margin="{TemplateBinding Padding}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              RecognizesAccessKey="True"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              Visibility="Collapsed"
+                                              Content="{Binding Path=(hc:StatusSwitchElement.CheckedElement),RelativeSource={RelativeSource TemplatedParent}}">
+                                <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                <ContentPresenter.Resources>
+                                    <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                           TargetType="TextBlock">
+                                        <Setter Property="Foreground"
+                                                Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                    </Style>
+                                </ContentPresenter.Resources>
+                            </ContentPresenter>
                         </hc:SimplePanel>
                     </Border>
                     <ControlTemplate.Triggers>

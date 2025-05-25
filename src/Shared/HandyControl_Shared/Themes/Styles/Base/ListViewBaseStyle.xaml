@@ -30,7 +30,21 @@
                 <ControlTemplate TargetType="GridViewColumnHeader">
                     <hc:SimplePanel SnapsToDevicePixels="true">
                         <Border x:Name="HeaderBorder" BorderBrush="{TemplateBinding BorderBrush}" Background="Transparent">
-                            <ContentPresenter x:Name="HeaderContent" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            <ContentPresenter x:Name="HeaderContent"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              Margin="{TemplateBinding Padding}"
+                                              RecognizesAccessKey="True"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                <ContentPresenter.Resources>
+                                    <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                           TargetType="TextBlock">
+                                        <Setter Property="Foreground"
+                                                Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                    </Style>
+                                </ContentPresenter.Resources>
+                            </ContentPresenter>
                         </Border>
                         <Canvas>
                             <Thumb x:Name="PART_HeaderGripper" Style="{StaticResource GridViewColumnHeaderGripper}"/>
@@ -79,7 +93,18 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="ListViewItem">
 					        <Border CornerRadius="4" x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
-                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                    <ContentPresenter.Resources>
+                                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                               TargetType="TextBlock">
+                                            <Setter Property="Foreground"
+                                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                        </Style>
+                                    </ContentPresenter.Resources>
+                                </ContentPresenter>
                             </Border>
 				        </ControlTemplate>
                     </Setter.Value>

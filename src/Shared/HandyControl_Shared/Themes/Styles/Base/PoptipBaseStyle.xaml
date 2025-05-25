@@ -15,7 +15,19 @@
             <Setter.Value>
                 <ControlTemplate TargetType="hc:Poptip">
                     <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}">
-                        <ContentPresenter Margin="{TemplateBinding Padding}" ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}" ContentStringFormat="{TemplateBinding ContentStringFormat}" ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                        <ContentPresenter Margin="{TemplateBinding Padding}"
+                                          ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
+                                          ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}">
+                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

@@ -61,7 +61,20 @@
                 <RowDefinition MinHeight="{Binding Path=(hc:InfoElement.MinContentHeight),RelativeSource={RelativeSource TemplatedParent}}" Height="{Binding Path=(hc:InfoElement.ContentHeight),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Double2GridLengthConverter}}"/>
             </Grid.RowDefinitions>
             <DockPanel LastChildFill="True" Visibility="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource String2VisibilityConverter}}" HorizontalAlignment="{Binding Path=(hc:TitleElement.HorizontalAlignment),RelativeSource={RelativeSource TemplatedParent}}" Margin="{Binding Path=(hc:TitleElement.MarginOnTheTop),RelativeSource={RelativeSource TemplatedParent}}">
-                <ContentPresenter DockPanel.Dock="Right" TextElement.Foreground="{DynamicResource DangerBrush}" Margin="4,0,0,0" Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}" Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}"/>
+                <ContentPresenter DockPanel.Dock="Right"
+                                  TextElement.Foreground="{DynamicResource DangerBrush}"
+                                  Margin="4,0,0,0"
+                                  Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}"
+                                  Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}">
+                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                    <ContentPresenter.Resources>
+                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                               TargetType="TextBlock">
+                            <Setter Property="Foreground"
+                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                        </Style>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
                 <TextBlock hc:TextBlockAttach.AutoTooltip="True" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Text="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent}}"/>
             </DockPanel>
             <Grid x:Name="PART_Root" Grid.Row="1">
@@ -114,7 +127,20 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <DockPanel LastChildFill="True" Visibility="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource String2VisibilityConverter}}" HorizontalAlignment="{Binding Path=(hc:TitleElement.HorizontalAlignment),RelativeSource={RelativeSource TemplatedParent}}" VerticalAlignment="{Binding Path=(hc:TitleElement.VerticalAlignment),RelativeSource={RelativeSource TemplatedParent}}" Margin="{Binding Path=(hc:TitleElement.MarginOnTheLeft),RelativeSource={RelativeSource TemplatedParent}}">
-                <ContentPresenter DockPanel.Dock="Right" TextElement.Foreground="{DynamicResource DangerBrush}" Margin="4,0,0,0" Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}" Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}"/>
+                <ContentPresenter DockPanel.Dock="Right"
+                                  TextElement.Foreground="{DynamicResource DangerBrush}"
+                                  Margin="4,0,0,0"
+                                  Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}"
+                                  Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}">
+                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                    <ContentPresenter.Resources>
+                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                               TargetType="TextBlock">
+                            <Setter Property="Foreground"
+                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                        </Style>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
                 <TextBlock hc:TextBlockAttach.AutoTooltip="True" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Text="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent}}"/>
             </DockPanel>
             <Grid x:Name="PART_Root" Grid.Column="1">
@@ -181,7 +207,20 @@
                 <RowDefinition MinHeight="{Binding Path=(hc:InfoElement.MinContentHeight),RelativeSource={RelativeSource TemplatedParent}}" Height="{Binding Path=(hc:InfoElement.ContentHeight),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Double2GridLengthConverter}}"/>
             </Grid.RowDefinitions>
             <DockPanel LastChildFill="True" Visibility="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource String2VisibilityConverter}}" HorizontalAlignment="{Binding Path=(hc:TitleElement.HorizontalAlignment),RelativeSource={RelativeSource TemplatedParent}}" Margin="{Binding Path=(hc:TitleElement.MarginOnTheTop),RelativeSource={RelativeSource TemplatedParent}}">
-                <ContentPresenter DockPanel.Dock="Right" TextElement.Foreground="{DynamicResource DangerBrush}" Margin="4,0,0,0" Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}" Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}" />
+                <ContentPresenter DockPanel.Dock="Right"
+                                  TextElement.Foreground="{DynamicResource DangerBrush}"
+                                  Margin="4,0,0,0"
+                                  Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}"
+                                  Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}">
+                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                    <ContentPresenter.Resources>
+                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                               TargetType="TextBlock">
+                            <Setter Property="Foreground"
+                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                        </Style>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
                 <TextBlock hc:TextBlockAttach.AutoTooltip="True" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Text="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent}}" />
             </DockPanel>
             <Grid x:Name="PART_Root" Grid.Row="1">
@@ -245,7 +284,20 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <DockPanel LastChildFill="True" Visibility="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource String2VisibilityConverter}}" HorizontalAlignment="{Binding Path=(hc:TitleElement.HorizontalAlignment),RelativeSource={RelativeSource TemplatedParent}}" VerticalAlignment="{Binding Path=(hc:TitleElement.VerticalAlignment),RelativeSource={RelativeSource TemplatedParent}}" Margin="{Binding Path=(hc:TitleElement.MarginOnTheLeft),RelativeSource={RelativeSource TemplatedParent}}">
-                <ContentPresenter DockPanel.Dock="Right" TextElement.Foreground="{DynamicResource DangerBrush}" Margin="4,0,0,0" Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}" Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}"/>
+                <ContentPresenter DockPanel.Dock="Right"
+                                  TextElement.Foreground="{DynamicResource DangerBrush}"
+                                  Margin="4,0,0,0"
+                                  Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}"
+                                  Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}">
+                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                    <ContentPresenter.Resources>
+                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                               TargetType="TextBlock">
+                            <Setter Property="Foreground"
+                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                        </Style>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
                 <TextBlock hc:TextBlockAttach.AutoTooltip="True" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Text="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent}}"/>
             </DockPanel>
             <Grid x:Name="PART_Root" Grid.Column="1">

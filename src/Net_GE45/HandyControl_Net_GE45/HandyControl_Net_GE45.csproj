@@ -19,12 +19,6 @@
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\HandyControl.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\..\Shared\HandyControl_Shared\Properties\Langs\Lang.Designer.cs">
-      <Link>Properties\Langs\Lang.Designer.cs</Link>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Lang.resx</DependentUpon>
-    </Compile>
     <Compile Include="..\..\Shared\HandyControl_Shared\Properties\Langs\LangProvider.cs">
       <Link>Properties\Langs\LangProvider.cs</Link>
       <AutoGen>True</AutoGen>
@@ -35,7 +29,7 @@
   <ItemGroup>
     <EmbeddedResource Include="..\..\Shared\HandyControl_Shared\Properties\Langs\Lang.tr.resx">
       <Link>Properties\Langs\Lang.tr.resx</Link>
-    </EmbeddedResource>    
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\Shared\HandyControl_Shared\Properties\Langs\Lang.ca-ES.resx">
       <Link>Properties\Langs\Lang.ca-ES.resx</Link>
     </EmbeddedResource>
@@ -48,10 +42,10 @@
     <EmbeddedResource Include="..\..\Shared\HandyControl_Shared\Properties\Langs\Lang.es.resx">
       <Link>Properties\Langs\Lang.es.resx</Link>
     </EmbeddedResource>
-      <EmbeddedResource Include="..\..\Shared\HandyControl_Shared\Properties\Langs\Lang.fa.resx">
+    <EmbeddedResource Include="..\..\Shared\HandyControl_Shared\Properties\Langs\Lang.fa.resx">
       <Link>Properties\Langs\Lang.fa.resx</Link>
     </EmbeddedResource>
-      <EmbeddedResource Include="..\..\Shared\HandyControl_Shared\Properties\Langs\Lang.fr.resx">
+    <EmbeddedResource Include="..\..\Shared\HandyControl_Shared\Properties\Langs\Lang.fr.resx">
       <Link>Properties\Langs\Lang.fr.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\Shared\HandyControl_Shared\Properties\Langs\Lang.ja.resx">
@@ -69,10 +63,15 @@
     <EmbeddedResource Include="..\..\Shared\HandyControl_Shared\Properties\Langs\Lang.ru.resx">
       <Link>Properties\Langs\Lang.ru.resx</Link>
     </EmbeddedResource>
+    <Compile Include="..\..\Shared\HandyControl_Shared\Properties\Langs\Lang.Designer.cs">
+      <Link>Properties\Langs\Lang.Designer.cs</Link>
+      <DependentUpon>Properties\Langs\Lang.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <EmbeddedResource Include="..\..\Shared\HandyControl_Shared\Properties\Langs\Lang.resx">
       <Link>Properties\Langs\Lang.resx</Link>
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Lang.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Compile Include="..\..\Shared\HandyControl_Shared\Properties\AssemblyInfo.cs">
       <Link>Properties\AssemblyInfo.cs</Link>
@@ -89,12 +88,6 @@
   <Import Project="..\..\Shared\Microsoft.Expression.Drawing\Microsoft.Expression.Drawing.projitems" Label="Shared" />
   <Import Project="..\..\Shared\System.Windows.Interactivity\System.Windows.Interactivity.projitems" Label="Shared" />
   <Import Project="..\..\Shared\Microsoft.Expression.Interactions\Microsoft.Expression.Interactions.projitems" Label="Shared" />
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
   <ItemGroup>
     <Resource Include="..\..\Shared\HandyControl_Shared\Resources\dropper.cur">
       <Link>Resources\dropper.cur</Link>

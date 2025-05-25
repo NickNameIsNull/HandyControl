@@ -64,7 +64,19 @@
                                             </MultiBinding>
                                         </TextBlock.Visibility>
                                     </TextBlock>
-                                    <ContentPresenter WindowChrome.IsHitTestVisibleInChrome="True" Grid.Column="2" x:Name="ContentPresenterMain" Content="{TemplateBinding NonClientAreaContent}"/>
+                                    <ContentPresenter WindowChrome.IsHitTestVisibleInChrome="True"
+                                                      Grid.Column="2"
+                                                      x:Name="ContentPresenterMain"
+                                                      Content="{TemplateBinding NonClientAreaContent}">
+                                        <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                        <ContentPresenter.Resources>
+                                            <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                                   TargetType="TextBlock">
+                                                <Setter Property="Foreground"
+                                                        Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                            </Style>
+                                        </ContentPresenter.Resources>
+                                    </ContentPresenter>
                                 </Grid>
                             </Grid>
                             <AdornerDecorator Grid.Row="1">

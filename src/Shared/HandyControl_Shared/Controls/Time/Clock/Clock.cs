@@ -17,8 +17,27 @@ namespace HandyControl.Controls;
 [TemplatePart(Name = ElementBorderClock, Type = typeof(Border))]
 [TemplatePart(Name = ElementPanelNum, Type = typeof(CirclePanel))]
 [TemplatePart(Name = ElementTimeStr, Type = typeof(TextBlock))]
+
+#region Flag 时钟列表选择扩展
+[TemplatePart(Name = ElementListClockPresenter, Type = typeof(ContentPresenter))]
+[TemplatePart(Name = ElementListClockPopup, Type = typeof(Popup))]
+[TemplatePart(Name = ElementListClockToggleButton, Type = typeof(ToggleButton))]
+[TemplatePart(Name = ElementTimeStart, Type = typeof(Button))]
+[TemplatePart(Name = ElementTimeNow, Type = typeof(Button))]
+[TemplatePart(Name = ElementTimeEnd, Type = typeof(Button))]
+[TemplatePart(Name = ElementClockTimeStart, Type = typeof(Button))]
+[TemplatePart(Name = ElementClockTimeNow, Type = typeof(Button))]
+[TemplatePart(Name = ElementClockTimeEnd, Type = typeof(Button))]
+#endregion Flag 时钟列表选择扩展
 public class Clock : ClockBase
 {
+    public Clock():base()
+    {
+        #region Flag 时钟列表选择扩展
+        InitListClock();
+        #endregion Flag 时钟列表选择扩展
+    }
+
     #region Constants
 
     private const string ElementButtonAm = "PART_ButtonAm";
@@ -29,6 +48,17 @@ public class Clock : ClockBase
     private const string ElementPanelNum = "PART_PanelNum";
     private const string ElementTimeStr = "PART_TimeStr";
 
+    #region Flag 时钟列表选择扩展
+    private const string ElementListClockPresenter = "PART_ListClockPresenter";
+    private const string ElementListClockPopup = "PART_ListClockPopup";
+    private const string ElementListClockToggleButton = "PART_ListClockToggleButton";
+    private const string ElementTimeStart = "PART_TimeStart";
+    private const string ElementTimeNow = "PART_TimeNow";
+    private const string ElementTimeEnd = "PART_TimeEnd";
+    private const string ElementClockTimeStart = "PART_ClockTimeStart";
+    private const string ElementClockTimeNow = "PART_ClockTimeNow";
+    private const string ElementClockTimeEnd = "PART_ClockTimeEnd";
+    #endregion Flag 时钟列表选择扩展
     #endregion Constants
 
     #region Data
@@ -54,6 +84,20 @@ public class Clock : ClockBase
     private TextBlock _blockTime;
 
     private int _secValue;
+
+    #region Flag 时钟列表选择扩展
+    private ListClock _listClock;
+    private ContentPresenter _listClockPresenter;
+    private Popup _listClockPopup;
+    private ToggleButton _listClockToggleButton;
+    private Button _timeStart;
+    private Button _timeNow;
+    private Button _timeEnd;
+    private Button _clockTimeStart;
+    private Button _clockTimeNow;
+    private Button _clockTimeEnd;
+    private DateTime? _showListClockDisplayDateTime;
+    #endregion Flag 时钟列表选择扩展
 
     #endregion Data
 
@@ -122,6 +166,40 @@ public class Clock : ClockBase
             _canvas.MouseMove -= Canvas_OnMouseMove;
         }
 
+        #region Flag 时钟列表选择扩展
+        if (_timeStart != null)
+        {
+            _timeStart.Click -= TimeButton_Click;
+        }
+        if (_timeNow != null)
+        {
+            _timeNow.Click -= TimeButton_Click;
+        }
+        if (_timeEnd != null)
+        {
+            _timeEnd.Click -= TimeButton_Click;
+        }
+        if (_clockTimeStart != null)
+        {
+            _clockTimeStart.Click -= TimeButton_Click;
+        }
+        if (_clockTimeNow != null)
+        {
+            _clockTimeNow.Click -= TimeButton_Click;
+        }
+        if (_clockTimeEnd != null)
+        {
+            _clockTimeEnd.Click -= TimeButton_Click;
+        }
+
+        if (_listClockToggleButton != null)
+        {
+            _listClockToggleButton.Checked -= ListClockToggleButton_Checked;
+            _listClockToggleButton.Unchecked -= ListClockToggleButton_Unchecked;
+            //_blockTime.Click -= TimeStrButton_Click;
+        }
+        #endregion Flag 时钟列表选择扩展
+
         base.OnApplyTemplate();
 
         _buttonAm = GetTemplateChild(ElementButtonAm) as RadioButton;
@@ -133,7 +211,59 @@ public class Clock : ClockBase
         _circlePanel = GetTemplateChild(ElementPanelNum) as CirclePanel;
         _blockTime = GetTemplateChild(ElementTimeStr) as TextBlock;
 
+
+        #region Flag 时钟列表选择扩展
+        _listClockPresenter = GetTemplateChild(ElementListClockPresenter) as ContentPresenter;
+        _listClockPopup = GetTemplateChild(ElementListClockPopup) as Popup;
+        _listClockToggleButton = GetTemplateChild(ElementListClockToggleButton) as ToggleButton;
+        _timeStart = GetTemplateChild(ElementTimeStart) as Button;
+        _timeNow = GetTemplateChild(ElementTimeNow) as Button;
+        _timeEnd = GetTemplateChild(ElementTimeEnd) as Button;
+        _clockTimeStart = GetTemplateChild(ElementClockTimeStart) as Button;
+        _clockTimeNow = GetTemplateChild(ElementClockTimeNow) as Button;
+        _clockTimeEnd = GetTemplateChild(ElementClockTimeEnd) as Button;
+        #endregion Flag 时钟列表选择扩展
+
         if (!CheckNull()) return;
+
+        #region Flag 时钟列表选择扩展
+        if (_timeStart != null)
+        {
+            _timeStart.Click += TimeButton_Click;
+        }
+        if (_timeNow != null)
+        {
+            _timeNow.Click += TimeButton_Click;
+        }
+        if (_timeEnd != null)
+        {
+            _timeEnd.Click += TimeButton_Click;
+        }
+        if (_clockTimeStart != null)
+        {
+            _clockTimeStart.Click += TimeButton_Click;
+        }
+        if (_clockTimeNow != null)
+        {
+            _clockTimeNow.Click += TimeButton_Click;
+        }
+        if (_clockTimeEnd != null)
+        {
+            _clockTimeEnd.Click -= TimeButton_Click;
+            _clockTimeEnd.Click += TimeButton_Click;
+        }
+
+        if (_listClockToggleButton != null)
+        {
+            _listClockToggleButton.Checked += ListClockToggleButton_Checked;
+            _listClockToggleButton.Unchecked += ListClockToggleButton_Unchecked;
+            //_blockTime.Click -= TimeStrButton_Click;
+        }
+        if (_listClockPresenter != null)
+        {
+            _listClockPresenter.Content = _listClock;
+        }
+        #endregion Flag 时钟列表选择扩展
 
         _buttonAm.Click += ButtonAm_OnClick;
         _buttonPm.Click += ButtonPm_OnClick;
@@ -176,13 +306,140 @@ public class Clock : ClockBase
     #endregion Public Methods
 
     #region Private Methods
+    /// <summary>
+    /// 初始化列表时钟的时间
+    /// </summary>
+    private void InitListClock()
+    {
+        _listClock = new ListClock()
+        {
+            Width = 200,
+            Margin = new Thickness(0),
+            Padding = new Thickness(0),
+            ShowConfirmButton = true,
+        };
+        Binding displayTimeBinding = new Binding(nameof(DisplayTime))
+        {
+            Source = this
+        };
+
+        Binding selectedTimeBinding = new Binding(nameof(SelectedTimeProperty))
+        {
+            Source = this
+        };
+
+        _listClock.SetBinding(ListClock.DisplayTimeProperty, displayTimeBinding);
+        _listClock.SetBinding(ListClock.SelectedTimeProperty, displayTimeBinding);
+        _listClock.SetValue(BorderElement.CornerRadiusProperty, new CornerRadius(0, 0, 4, 4));
+        _listClock.Confirmed += ListClock_Confirmed;
+        //_listClock.SelectedTimeChanged -= ListClock_SelectedTimeChanged;
+        //_listClock.DisplayTimeChanged -= ListClock_DisplayTimeChanged;
+    }
+
+    /// <summary>
+    /// 时钟列表确认
+    /// </summary>
+    private void ListClock_Confirmed()
+    {
+        if (_listClockPopup != null)
+        {
+            _listClockPopup.IsOpen = false;
+        }
+        Update(_listClock.SelectedTime.GetValueOrDefault());
+    }
+
+    /// <summary>
+    /// 列表时钟选中
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void ListClockToggleButton_Checked(object sender, RoutedEventArgs e)
+    {
+        if (_listClock != null)
+        {
+            if (e.Source is ToggleButton { IsChecked: true })
+            {
+                _showListClockDisplayDateTime = DisplayTime;
+                _listClock.SelectedTime = DisplayTime;
+                _listClock.DisplayTime = DisplayTime;
+            }
+        }
+        e.Handled = true;
+    }
+    /// <summary>
+    /// 列表时钟取消选中
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void ListClockToggleButton_Unchecked(object sender, RoutedEventArgs e)
+    {
+        //if(_showListClockDisplayDateTime != null && _showListClockDisplayDateTime!= DateTime.MinValue)
+        //{
+        //    //关闭时恢复打开时的时间
+        //    Update(_showListClockDisplayDateTime.GetValueOrDefault());
+        //}
+        e.Handled = true;
+    }
+
+    /// <summary>
+    /// 时间按钮点击事件
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void TimeButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button btn)
+        {
+            if (btn.Name.EndsWith("TimeStart"))
+            {
+                if (_listClock != null)
+                {
+                    _listClock.DisplayTime = _listClock.DisplayTime.Date;
+                    _listClock.SelectedTime = _listClock.SelectedTime.GetValueOrDefault().Date;
+                }
+                Update(DisplayTime.Date);
+                //DisplayTime = DisplayTime.Date;
+                //SelectedTime = SelectedTime.GetValueOrDefault().Date;
+
+            }
+            else if (btn.Name.EndsWith("TimeNow"))
+            {
+                if (_listClock != null)
+                {
+                    _listClock.DisplayTime = DateTime.Now;
+                    _listClock.SelectedTime = DateTime.Now;
+                }
+                Update(DateTime.Now);
+            }
+            else if (btn.Name.EndsWith("TimeEnd"))
+            {
+                if (_listClock != null)
+                {
+                    _listClock.DisplayTime = _listClock.DisplayTime.Date.AddDays(1).AddSeconds(-1);
+                    _listClock.SelectedTime = _listClock.SelectedTime.GetValueOrDefault().Date.AddDays(1).AddSeconds(-1);
+                }
+                Update(DisplayTime.Date.AddDays(1).AddSeconds(-1));
+                //DisplayTime = DisplayTime.Date.AddDays(1).AddSeconds(-1);
+                //SelectedTime = SelectedTime.GetValueOrDefault().Date.AddDays(1).AddSeconds(-1);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 时间显示字符串按钮点击事件
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void TimeStrButton_Click(object sender, RoutedEventArgs e)
+    {
+
+    }
 
     private bool CheckNull()
     {
         if (_buttonPm == null || _buttonAm == null || ButtonConfirm == null || _canvas == null ||
             _borderTitle == null || _borderClock == null || _circlePanel == null ||
             _blockTime == null) return false;
-
         return true;
     }
 

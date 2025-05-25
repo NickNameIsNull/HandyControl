@@ -19,11 +19,44 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <Border BorderThickness="0,0,0,1" Visibility="{TemplateBinding Header, Converter={StaticResource Object2VisibilityConverter}}" BorderBrush="{TemplateBinding BorderBrush}">
-                                <ContentPresenter ContentSource="Header" ContentTemplate="{TemplateBinding HeaderTemplate}" ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" ContentStringFormat="{TemplateBinding HeaderStringFormat}"/>
+                                <ContentPresenter ContentSource="Header"
+                                                  ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                                  ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
+                                                  ContentStringFormat="{TemplateBinding HeaderStringFormat}">
+                                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                    <ContentPresenter.Resources>
+                                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                               TargetType="TextBlock">
+                                            <Setter Property="Foreground"
+                                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                        </Style>
+                                    </ContentPresenter.Resources>
+                                </ContentPresenter>
                             </Border>
-                            <ContentPresenter Grid.Row="1"/>
+                            <ContentPresenter Grid.Row="1">
+                                <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                <ContentPresenter.Resources>
+                                    <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                           TargetType="TextBlock">
+                                        <Setter Property="Foreground"
+                                                Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                    </Style>
+                                </ContentPresenter.Resources>
+                            </ContentPresenter>
                             <Border Grid.Row="2" BorderThickness="0,1,0,0"  Visibility="{TemplateBinding Footer, Converter={StaticResource Object2VisibilityConverter}}" BorderBrush="{TemplateBinding BorderBrush}">
-                                <ContentPresenter ContentSource="Footer" ContentTemplate="{TemplateBinding FooterTemplate}" ContentTemplateSelector="{TemplateBinding FooterTemplateSelector}" ContentStringFormat="{TemplateBinding FooterStringFormat}"/>
+                                <ContentPresenter ContentSource="Footer"
+                                                  ContentTemplate="{TemplateBinding FooterTemplate}"
+                                                  ContentTemplateSelector="{TemplateBinding FooterTemplateSelector}"
+                                                  ContentStringFormat="{TemplateBinding FooterStringFormat}">
+                                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                    <ContentPresenter.Resources>
+                                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                               TargetType="TextBlock">
+                                            <Setter Property="Foreground"
+                                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                        </Style>
+                                    </ContentPresenter.Resources>
+                                </ContentPresenter>
                             </Border>
                         </Grid>
                     </Border>

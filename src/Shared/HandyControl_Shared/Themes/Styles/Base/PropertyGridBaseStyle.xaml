@@ -39,7 +39,17 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <ContentPresenter x:Name="Presenter" Margin="0,0,0,10"/>
+                            <ContentPresenter x:Name="Presenter"
+                                              Margin="0,0,0,10">
+                                <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                <ContentPresenter.Resources>
+                                    <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                           TargetType="TextBlock">
+                                        <Setter Property="Foreground"
+                                                Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                    </Style>
+                                </ContentPresenter.Resources>
+                            </ContentPresenter>
                             <StackPanel Grid.Row="1" Orientation="Horizontal">
                                 <TextBlock FontWeight="Bold" Text="{Binding PropertyTypeName,RelativeSource={RelativeSource AncestorType=hc:PropertyItem}}"/>
                                 <TextBlock Text="{Binding PropertyName,RelativeSource={RelativeSource AncestorType=hc:PropertyItem}}" Margin="6,0,0,0"/>
@@ -73,7 +83,16 @@
                                 </TextBlock.ToolTip>
                             </TextBlock>
                         </GroupBox.Header>
-                        <ContentPresenter ContentSource="EditorElement"/>
+                        <ContentPresenter ContentSource="EditorElement">
+                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                     </GroupBox>
                 </ControlTemplate>
             </Setter.Value>

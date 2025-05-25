@@ -42,7 +42,18 @@
                 <ControlTemplate TargetType="DataGridCell">
                     <Border Background="Transparent">
                         <Border Margin="0,0,4,0" CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}" Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                <ContentPresenter.Resources>
+                                    <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                           TargetType="TextBlock">
+                                        <Setter Property="Foreground"
+                                                Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                    </Style>
+                                </ContentPresenter.Resources>
+                            </ContentPresenter>
                         </Border>
                     </Border>
                 </ControlTemplate>
@@ -172,7 +183,18 @@
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <ContentPresenter RecognizesAccessKey="True" VerticalAlignment="Center" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                <ContentPresenter RecognizesAccessKey="True"
+                                                  VerticalAlignment="Center"
+                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                    <ContentPresenter.Resources>
+                                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                               TargetType="TextBlock">
+                                            <Setter Property="Foreground"
+                                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                        </Style>
+                                    </ContentPresenter.Resources>
+                                </ContentPresenter>
                                 <ToggleButton Grid.Column="1" VerticalAlignment="Center" Height="{x:Static system:Double.NaN}" Padding="4,0" Width="20" IsEnabled="False" Opacity="1" Foreground="{DynamicResource PrimaryBrush}" x:Name="ToggleButtonSortDirection" Style="{StaticResource ToggleButtonIconTransparent}" hc:IconSwitchElement.Geometry="{StaticResource DownGeometry}" hc:IconSwitchElement.GeometrySelected="{StaticResource UpGeometry}"/>
                             </Grid>
                         </Border>
@@ -211,7 +233,18 @@
                     <hc:SimplePanel HorizontalAlignment="Center">
                         <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent" Padding="{TemplateBinding Padding}" >
                             <StackPanel Orientation="Horizontal">
-                                <ContentPresenter RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
+                                <ContentPresenter RecognizesAccessKey="True"
+                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                  VerticalAlignment="Center">
+                                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                    <ContentPresenter.Resources>
+                                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                               TargetType="TextBlock">
+                                            <Setter Property="Foreground"
+                                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                        </Style>
+                                    </ContentPresenter.Resources>
+                                </ContentPresenter>
                             </StackPanel>
                         </Border>
                         <Thumb x:Name="PART_TopHeaderGripper" Style="{StaticResource RowHeaderGripperStyle}" VerticalAlignment="Top"/>

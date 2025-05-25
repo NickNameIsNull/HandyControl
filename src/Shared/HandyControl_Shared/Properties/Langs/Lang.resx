@@ -237,4 +237,67 @@
   <data name="NoData" xml:space="preserve">
     <value>暂无数据</value>
   </data>
+  <data name="Today" xml:space="preserve">
+    <value>今天</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>昨天</value>
+  </data>
+  <data name="Tomorrow" xml:space="preserve">
+    <value>明天</value>
+  </data>
+  <data name="ThisWeek" xml:space="preserve">
+    <value>本周</value>
+  </data>
+  <data name="LastWeek" xml:space="preserve">
+    <value>上周</value>
+  </data>
+  <data name="NextWeek" xml:space="preserve">
+    <value>下周</value>
+  </data>
+  <data name="Monday" xml:space="preserve">
+    <value>周一</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>周日</value>
+  </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>本月</value>
+  </data>
+  <data name="LastMonth" xml:space="preserve">
+    <value>上月</value>
+  </data>
+  <data name="NextMonth" xml:space="preserve">
+    <value>下月</value>
+  </data>
+  <data name="MonthBegin" xml:space="preserve">
+    <value>月初</value>
+  </data>
+  <data name="MonthEnd" xml:space="preserve">
+    <value>月末</value>
+  </data>
+  <data name="ThisYear" xml:space="preserve">
+    <value>今年</value>
+  </data>
+  <data name="LastYear" xml:space="preserve">
+    <value>去年</value>
+  </data>
+  <data name="NextYear" xml:space="preserve">
+    <value>明年</value>
+  </data>
+  <data name="YearBegin" xml:space="preserve">
+    <value>年初</value>
+  </data>
+  <data name="YearEnd" xml:space="preserve">
+    <value>年末</value>
+  </data>
+  <data name="DayTimeBegin" xml:space="preserve">
+    <value>00:00:00</value>
+  </data>
+  <data name="DayTimeNow" xml:space="preserve">
+    <value>当前时间</value>
+  </data>
+  <data name="DayTimeEnd" xml:space="preserve">
+    <value>23:59:59</value>
+  </data>
 </root>

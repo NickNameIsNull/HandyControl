@@ -17,7 +17,26 @@
                 </hc:ToggleBlock.CheckedContent>
             </hc:ToggleBlock>
             <hc:ToggleBlock Grid.Column="0" Grid.ColumnSpan="2" Background="Transparent" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" ToggleGesture="LeftClick" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
-            <ContentPresenter Grid.Column="0" Margin="{TemplateBinding Padding}" x:Name="contentPresenter" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Content="{TemplateBinding SelectionBoxItem}" ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" IsHitTestVisible="false" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+            <ContentPresenter Grid.Column="0"
+                              Margin="{TemplateBinding Padding}"
+                              x:Name="contentPresenter"
+                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                              ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                              Content="{TemplateBinding SelectionBoxItem}"
+                              ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
+                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              IsHitTestVisible="false"
+                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                <ContentPresenter.Resources>
+                    <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                           TargetType="TextBlock">
+                        <Setter Property="Foreground"
+                                Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                    </Style>
+                </ContentPresenter.Resources>
+            </ContentPresenter>
             <Popup x:Name="PART_Popup" PlacementTarget="{Binding ElementName=border}" AllowsTransparency="true" IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Margin="1" PopupAnimation="{StaticResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" Placement="Bottom">
                 <Decorator Margin="8 0">
                     <Border BorderThickness="0,1,0,0" Effect="{StaticResource EffectShadow2}" Margin="0,0,0,8" CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}" x:Name="dropDownBorder" MinWidth="{Binding ActualWidth, ElementName=border}" MaxHeight="{TemplateBinding MaxDropDownHeight}" BorderBrush="{DynamicResource BorderBrush}" Background="{DynamicResource RegionBrush}">
@@ -81,7 +100,20 @@
                 <RowDefinition MinHeight="{Binding Path=(hc:InfoElement.MinContentHeight),RelativeSource={RelativeSource TemplatedParent}}" Height="{Binding Path=(hc:InfoElement.ContentHeight),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Double2GridLengthConverter}}" />
             </Grid.RowDefinitions>
             <DockPanel LastChildFill="True" Visibility="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource String2VisibilityConverter}}" HorizontalAlignment="{Binding Path=(hc:TitleElement.HorizontalAlignment),RelativeSource={RelativeSource TemplatedParent}}" Margin="{Binding Path=(hc:TitleElement.MarginOnTheTop),RelativeSource={RelativeSource TemplatedParent}}">
-                <ContentPresenter DockPanel.Dock="Right" TextElement.Foreground="{DynamicResource DangerBrush}" Margin="4,0,0,0" Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}" Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}" />
+                <ContentPresenter DockPanel.Dock="Right"
+                                  TextElement.Foreground="{DynamicResource DangerBrush}"
+                                  Margin="4,0,0,0"
+                                  Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}"
+                                  Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}">
+                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                    <ContentPresenter.Resources>
+                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                               TargetType="TextBlock">
+                            <Setter Property="Foreground"
+                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                        </Style>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
                 <TextBlock hc:TextBlockAttach.AutoTooltip="True" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Text="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent}}" />
             </DockPanel>
             <Grid x:Name="contentPanel" Grid.Row="1">
@@ -100,7 +132,26 @@
                     </hc:ToggleBlock.CheckedContent>
                 </hc:ToggleBlock>
                 <hc:ToggleBlock Grid.Column="0" Grid.ColumnSpan="2" Background="Transparent" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" ToggleGesture="LeftClick" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
-                <ContentPresenter Grid.Column="0" Margin="{TemplateBinding Padding}" x:Name="contentPresenter" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Content="{TemplateBinding SelectionBoxItem}" ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" IsHitTestVisible="false" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                <ContentPresenter Grid.Column="0"
+                                  Margin="{TemplateBinding Padding}"
+                                  x:Name="contentPresenter"
+                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                  ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                  Content="{TemplateBinding SelectionBoxItem}"
+                                  ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
+                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  IsHitTestVisible="false"
+                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                    <ContentPresenter.Resources>
+                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                               TargetType="TextBlock">
+                            <Setter Property="Foreground"
+                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                        </Style>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
                 <Popup x:Name="PART_Popup" PlacementTarget="{Binding ElementName=border}" AllowsTransparency="true" IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Margin="1" PopupAnimation="{StaticResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" Placement="Bottom">
                     <Decorator Margin="8 0">
                         <Border BorderThickness="0,1,0,0" Effect="{StaticResource EffectShadow2}" Margin="0,0,0,8" CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}" x:Name="dropDownBorder" MinWidth="{Binding ActualWidth, ElementName=border}" MaxHeight="{TemplateBinding MaxDropDownHeight}" BorderBrush="{DynamicResource BorderBrush}" Background="{DynamicResource RegionBrush}">
@@ -165,7 +216,20 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <DockPanel LastChildFill="True" Visibility="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource String2VisibilityConverter}}" HorizontalAlignment="{Binding Path=(hc:TitleElement.HorizontalAlignment),RelativeSource={RelativeSource TemplatedParent}}" VerticalAlignment="{Binding Path=(hc:TitleElement.VerticalAlignment),RelativeSource={RelativeSource TemplatedParent}}" Margin="{Binding Path=(hc:TitleElement.MarginOnTheLeft),RelativeSource={RelativeSource TemplatedParent}}">
-                <ContentPresenter DockPanel.Dock="Right" TextElement.Foreground="{DynamicResource DangerBrush}" Margin="4,0,0,0" Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}" Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}" />
+                <ContentPresenter DockPanel.Dock="Right"
+                                  TextElement.Foreground="{DynamicResource DangerBrush}"
+                                  Margin="4,0,0,0"
+                                  Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}"
+                                  Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}">
+                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                    <ContentPresenter.Resources>
+                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                               TargetType="TextBlock">
+                            <Setter Property="Foreground"
+                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                        </Style>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
                 <TextBlock hc:TextBlockAttach.AutoTooltip="True" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Text="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent}}" />
             </DockPanel>
             <Grid x:Name="contentPanel" Grid.Column="1">
@@ -184,7 +248,26 @@
                     </hc:ToggleBlock.CheckedContent>
                 </hc:ToggleBlock>
                 <hc:ToggleBlock Grid.Column="0" Grid.ColumnSpan="2" Background="Transparent" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" ToggleGesture="LeftClick" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
-                <ContentPresenter Grid.Column="0" Margin="{TemplateBinding Padding}" x:Name="contentPresenter" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Content="{TemplateBinding SelectionBoxItem}" ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" IsHitTestVisible="false" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                <ContentPresenter Grid.Column="0"
+                                  Margin="{TemplateBinding Padding}"
+                                  x:Name="contentPresenter"
+                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                  ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                  Content="{TemplateBinding SelectionBoxItem}"
+                                  ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
+                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  IsHitTestVisible="false"
+                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                    <ContentPresenter.Resources>
+                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                               TargetType="TextBlock">
+                            <Setter Property="Foreground"
+                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                        </Style>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
                 <Popup x:Name="PART_Popup" PlacementTarget="{Binding ElementName=border}" AllowsTransparency="true" IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Margin="1" PopupAnimation="{StaticResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" Placement="Bottom">
                     <Decorator Margin="8 0">
                         <Border BorderThickness="0,1,0,0" Effect="{StaticResource EffectShadow2}" Margin="0,0,0,8" CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}" x:Name="dropDownBorder" MinWidth="{Binding ActualWidth, ElementName=border}" MaxHeight="{TemplateBinding MaxDropDownHeight}" BorderBrush="{DynamicResource BorderBrush}" Background="{DynamicResource RegionBrush}">
@@ -337,7 +420,20 @@
                 <RowDefinition MinHeight="{Binding Path=(hc:InfoElement.MinContentHeight),RelativeSource={RelativeSource TemplatedParent}}" Height="{Binding Path=(hc:InfoElement.ContentHeight),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Double2GridLengthConverter}}" />
             </Grid.RowDefinitions>
             <DockPanel LastChildFill="True" Visibility="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource String2VisibilityConverter}}" HorizontalAlignment="{Binding Path=(hc:TitleElement.HorizontalAlignment),RelativeSource={RelativeSource TemplatedParent}}" Margin="{Binding Path=(hc:TitleElement.MarginOnTheTop),RelativeSource={RelativeSource TemplatedParent}}">
-                <ContentPresenter DockPanel.Dock="Right" TextElement.Foreground="{DynamicResource DangerBrush}" Margin="4,0,0,0" Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}" Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}" />
+                <ContentPresenter DockPanel.Dock="Right"
+                                  TextElement.Foreground="{DynamicResource DangerBrush}"
+                                  Margin="4,0,0,0"
+                                  Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}"
+                                  Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}">
+                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                    <ContentPresenter.Resources>
+                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                               TargetType="TextBlock">
+                            <Setter Property="Foreground"
+                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                        </Style>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
                 <TextBlock hc:TextBlockAttach.AutoTooltip="True" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Text="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent}}" />
             </DockPanel>
             <Grid x:Name="contentPanel" Grid.Row="1">
@@ -417,7 +513,20 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <DockPanel LastChildFill="True" Visibility="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource String2VisibilityConverter}}" HorizontalAlignment="{Binding Path=(hc:TitleElement.HorizontalAlignment),RelativeSource={RelativeSource TemplatedParent}}" VerticalAlignment="{Binding Path=(hc:TitleElement.VerticalAlignment),RelativeSource={RelativeSource TemplatedParent}}" Margin="{Binding Path=(hc:TitleElement.MarginOnTheLeft),RelativeSource={RelativeSource TemplatedParent}}">
-                <ContentPresenter DockPanel.Dock="Right" TextElement.Foreground="{DynamicResource DangerBrush}" Margin="4,0,0,0" Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}" Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}" />
+                <ContentPresenter DockPanel.Dock="Right"
+                                  TextElement.Foreground="{DynamicResource DangerBrush}"
+                                  Margin="4,0,0,0"
+                                  Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}"
+                                  Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}">
+                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                    <ContentPresenter.Resources>
+                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                               TargetType="TextBlock">
+                            <Setter Property="Foreground"
+                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                        </Style>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
                 <TextBlock hc:TextBlockAttach.AutoTooltip="True" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Text="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent}}" />
             </DockPanel>
             <Grid x:Name="contentPanel" Grid.Column="1">
@@ -502,7 +611,20 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBoxItem">
                     <Border x:Name="Bd" CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
-                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), ElementName=Bd}" />
+                                    <Setter Property="Background"
+                                            Value="{Binding (TextElement.Background), ElementName=Bd}" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                     </Border>
                     <ControlTemplate.Triggers>
                         <MultiTrigger>
@@ -582,7 +704,20 @@
                 <RowDefinition MinHeight="{Binding Path=(hc:InfoElement.MinContentHeight),RelativeSource={RelativeSource TemplatedParent}}" Height="{Binding Path=(hc:InfoElement.ContentHeight),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Double2GridLengthConverter}}" />
             </Grid.RowDefinitions>
             <DockPanel LastChildFill="True" Visibility="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource String2VisibilityConverter}}" HorizontalAlignment="{Binding Path=(hc:TitleElement.HorizontalAlignment),RelativeSource={RelativeSource TemplatedParent}}" Margin="{Binding Path=(hc:TitleElement.MarginOnTheTop),RelativeSource={RelativeSource TemplatedParent}}">
-                <ContentPresenter DockPanel.Dock="Right" TextElement.Foreground="{DynamicResource DangerBrush}" Margin="4,0,0,0" Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}" Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}" />
+                <ContentPresenter DockPanel.Dock="Right"
+                                  TextElement.Foreground="{DynamicResource DangerBrush}"
+                                  Margin="4,0,0,0"
+                                  Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}"
+                                  Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}">
+                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                    <ContentPresenter.Resources>
+                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                               TargetType="TextBlock">
+                            <Setter Property="Foreground"
+                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                        </Style>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
                 <TextBlock hc:TextBlockAttach.AutoTooltip="True" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Text="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent}}" />
             </DockPanel>
             <Grid x:Name="contentPanel" Grid.Row="1">
@@ -602,7 +737,26 @@
                     </hc:ToggleBlock.CheckedContent>
                 </hc:ToggleBlock>
                 <hc:ToggleBlock Grid.Column="0" Grid.ColumnSpan="3" Background="Transparent" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" ToggleGesture="LeftClick" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
-                <ContentPresenter Grid.Column="0" Margin="{TemplateBinding Padding}" x:Name="contentPresenter" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Content="{TemplateBinding SelectionBoxItem}" ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" IsHitTestVisible="false" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                <ContentPresenter Grid.Column="0"
+                                  Margin="{TemplateBinding Padding}"
+                                  x:Name="contentPresenter"
+                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                  ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                  Content="{TemplateBinding SelectionBoxItem}"
+                                  ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
+                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  IsHitTestVisible="false"
+                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                    <ContentPresenter.Resources>
+                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                               TargetType="TextBlock">
+                            <Setter Property="Foreground"
+                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                        </Style>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
                 <Button Height="Auto" Width="Auto" HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" hc:IconElement.Width="14" Command="interactivity:ControlCommands.Clear" Visibility="Collapsed" Name="ButtonClear" Focusable="False" Grid.Column="1" Style="{StaticResource ButtonIcon}" Padding="0,0,2,0" hc:IconElement.Geometry="{StaticResource DeleteFillCircleGeometry}" Foreground="{Binding BorderBrush,ElementName=border}" />
                 <Popup x:Name="PART_Popup" PlacementTarget="{Binding ElementName=border}" AllowsTransparency="true" IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Margin="1" PopupAnimation="{StaticResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" Placement="Bottom">
                     <Decorator Margin="8 0">
@@ -689,7 +843,20 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <DockPanel LastChildFill="True" Visibility="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource String2VisibilityConverter}}" HorizontalAlignment="{Binding Path=(hc:TitleElement.HorizontalAlignment),RelativeSource={RelativeSource TemplatedParent}}" VerticalAlignment="{Binding Path=(hc:TitleElement.VerticalAlignment),RelativeSource={RelativeSource TemplatedParent}}" Margin="{Binding Path=(hc:TitleElement.MarginOnTheLeft),RelativeSource={RelativeSource TemplatedParent}}">
-                <ContentPresenter DockPanel.Dock="Right" TextElement.Foreground="{DynamicResource DangerBrush}" Margin="4,0,0,0" Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}" Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}" />
+                <ContentPresenter DockPanel.Dock="Right"
+                                  TextElement.Foreground="{DynamicResource DangerBrush}"
+                                  Margin="4,0,0,0"
+                                  Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}"
+                                  Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}">
+                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                    <ContentPresenter.Resources>
+                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                               TargetType="TextBlock">
+                            <Setter Property="Foreground"
+                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                        </Style>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
                 <TextBlock hc:TextBlockAttach.AutoTooltip="True" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Text="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent}}" />
             </DockPanel>
             <Grid x:Name="contentPanel" Grid.Column="1">
@@ -709,7 +876,26 @@
                     </hc:ToggleBlock.CheckedContent>
                 </hc:ToggleBlock>
                 <hc:ToggleBlock Grid.Column="0" Grid.ColumnSpan="3" Background="Transparent" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" ToggleGesture="LeftClick" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" />
-                <ContentPresenter Grid.Column="0" Margin="{TemplateBinding Padding}" x:Name="contentPresenter" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Content="{TemplateBinding SelectionBoxItem}" ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" IsHitTestVisible="false" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                <ContentPresenter Grid.Column="0"
+                                  Margin="{TemplateBinding Padding}"
+                                  x:Name="contentPresenter"
+                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                  ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                  Content="{TemplateBinding SelectionBoxItem}"
+                                  ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
+                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  IsHitTestVisible="false"
+                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                    <ContentPresenter.Resources>
+                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                               TargetType="TextBlock">
+                            <Setter Property="Foreground"
+                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                        </Style>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
                 <Button Height="Auto" Width="Auto" HorizontalContentAlignment="Left" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" hc:IconElement.Width="14" Command="interactivity:ControlCommands.Clear" Visibility="Collapsed" Name="ButtonClear" Focusable="False" Grid.Column="1" Style="{StaticResource ButtonIcon}" Padding="0,0,2,0" hc:IconElement.Geometry="{StaticResource DeleteFillCircleGeometry}" Foreground="{Binding BorderBrush,ElementName=border}" />
                 <Popup x:Name="PART_Popup" PlacementTarget="{Binding ElementName=border}" AllowsTransparency="true" IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Margin="1" PopupAnimation="{StaticResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" Placement="Bottom">
                     <Decorator Margin="8 0">
@@ -796,7 +982,20 @@
                 <RowDefinition MinHeight="{Binding Path=(hc:InfoElement.MinContentHeight),RelativeSource={RelativeSource TemplatedParent}}" Height="{Binding Path=(hc:InfoElement.ContentHeight),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Double2GridLengthConverter}}" />
             </Grid.RowDefinitions>
             <DockPanel Grid.ColumnSpan="2" LastChildFill="True" Visibility="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource String2VisibilityConverter}}" HorizontalAlignment="{Binding Path=(hc:TitleElement.HorizontalAlignment),RelativeSource={RelativeSource TemplatedParent}}" Margin="{Binding Path=(hc:TitleElement.MarginOnTheTop),RelativeSource={RelativeSource TemplatedParent}}">
-                <ContentPresenter DockPanel.Dock="Right" TextElement.Foreground="{DynamicResource DangerBrush}" Margin="4,0,0,0" Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}" Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}" />
+                <ContentPresenter DockPanel.Dock="Right"
+                                  TextElement.Foreground="{DynamicResource DangerBrush}"
+                                  Margin="4,0,0,0"
+                                  Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}"
+                                  Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}">
+                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                    <ContentPresenter.Resources>
+                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                               TargetType="TextBlock">
+                            <Setter Property="Foreground"
+                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                        </Style>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
                 <TextBlock hc:TextBlockAttach.AutoTooltip="True" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Text="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent}}" />
             </DockPanel>
             <Grid x:Name="contentPanel" Grid.Row="1">
@@ -898,7 +1097,20 @@
                 <RowDefinition MinHeight="{Binding Path=(hc:InfoElement.MinContentHeight),RelativeSource={RelativeSource TemplatedParent}}" Height="{Binding Path=(hc:InfoElement.ContentHeight),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Double2GridLengthConverter}}" />
             </Grid.RowDefinitions>
             <DockPanel Grid.ColumnSpan="2" LastChildFill="True" Visibility="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource String2VisibilityConverter}}" HorizontalAlignment="{Binding Path=(hc:TitleElement.HorizontalAlignment),RelativeSource={RelativeSource TemplatedParent}}" Margin="{Binding Path=(hc:TitleElement.MarginOnTheTop),RelativeSource={RelativeSource TemplatedParent}}">
-                <ContentPresenter DockPanel.Dock="Right" TextElement.Foreground="{DynamicResource DangerBrush}" Margin="4,0,0,0" Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}" Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}" />
+                <ContentPresenter DockPanel.Dock="Right"
+                                  TextElement.Foreground="{DynamicResource DangerBrush}"
+                                  Margin="4,0,0,0"
+                                  Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}"
+                                  Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}">
+                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                    <ContentPresenter.Resources>
+                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                               TargetType="TextBlock">
+                            <Setter Property="Foreground"
+                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                        </Style>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
                 <TextBlock hc:TextBlockAttach.AutoTooltip="True" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Text="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent}}" />
             </DockPanel>
             <Grid x:Name="contentPanel" Grid.Row="1">
@@ -1022,7 +1234,20 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <DockPanel LastChildFill="True" Visibility="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource String2VisibilityConverter}}" HorizontalAlignment="{Binding Path=(hc:TitleElement.HorizontalAlignment),RelativeSource={RelativeSource TemplatedParent}}" VerticalAlignment="{Binding Path=(hc:TitleElement.VerticalAlignment),RelativeSource={RelativeSource TemplatedParent}}" Margin="{Binding Path=(hc:TitleElement.MarginOnTheLeft),RelativeSource={RelativeSource TemplatedParent}}">
-                <ContentPresenter DockPanel.Dock="Right" TextElement.Foreground="{DynamicResource DangerBrush}" Margin="4,0,0,0" Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}" Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}" />
+                <ContentPresenter DockPanel.Dock="Right"
+                                  TextElement.Foreground="{DynamicResource DangerBrush}"
+                                  Margin="4,0,0,0"
+                                  Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}"
+                                  Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}">
+                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                    <ContentPresenter.Resources>
+                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                               TargetType="TextBlock">
+                            <Setter Property="Foreground"
+                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                        </Style>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
                 <TextBlock hc:TextBlockAttach.AutoTooltip="True" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Text="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent}}" />
             </DockPanel>
             <Grid x:Name="contentPanel" Grid.Column="1">
@@ -1124,7 +1349,20 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <DockPanel LastChildFill="True" Visibility="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource String2VisibilityConverter}}" HorizontalAlignment="{Binding Path=(hc:TitleElement.HorizontalAlignment),RelativeSource={RelativeSource TemplatedParent}}" VerticalAlignment="{Binding Path=(hc:TitleElement.VerticalAlignment),RelativeSource={RelativeSource TemplatedParent}}" Margin="{Binding Path=(hc:TitleElement.MarginOnTheLeft),RelativeSource={RelativeSource TemplatedParent}}">
-                <ContentPresenter DockPanel.Dock="Right" TextElement.Foreground="{DynamicResource DangerBrush}" Margin="4,0,0,0" Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}" Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}" />
+                <ContentPresenter DockPanel.Dock="Right"
+                                  TextElement.Foreground="{DynamicResource DangerBrush}"
+                                  Margin="4,0,0,0"
+                                  Content="{Binding Path=(hc:InfoElement.Symbol),RelativeSource={RelativeSource TemplatedParent}}"
+                                  Visibility="{Binding Path=(hc:InfoElement.Necessary),RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}">
+                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                    <ContentPresenter.Resources>
+                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                               TargetType="TextBlock">
+                            <Setter Property="Foreground"
+                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                        </Style>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
                 <TextBlock hc:TextBlockAttach.AutoTooltip="True" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Text="{Binding Path=(hc:InfoElement.Title),RelativeSource={RelativeSource TemplatedParent}}" />
             </DockPanel>
             <Grid x:Name="contentPanel" Grid.Column="1">

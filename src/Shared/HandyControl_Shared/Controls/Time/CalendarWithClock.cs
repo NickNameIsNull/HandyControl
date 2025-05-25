@@ -132,6 +132,14 @@ public class CalendarWithClock : Control
     #endregion
 
     #region Public Methods
+    /// <summary>
+    /// Flag HandyControl 日历扩展
+    /// </summary>
+    public System.Windows.Controls.Calendar Calendar
+    {
+        get { return _calendar; }
+    }
+
 
     public override void OnApplyTemplate()
     {
@@ -234,6 +242,9 @@ public class CalendarWithClock : Control
 
     private void Calendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
     {
+        //Flag HandyControl 日历扩展
+        CalendarElement.GetShowShortcutButton(this);
+
         Mouse.Capture(null);
         UpdateDisplayTime();
     }

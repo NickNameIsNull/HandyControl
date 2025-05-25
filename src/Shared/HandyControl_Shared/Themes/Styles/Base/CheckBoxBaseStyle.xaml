@@ -49,7 +49,24 @@
                             <Rectangle x:Name="indeterminateMark" RadiusX="2" RadiusY="2" Fill="{DynamicResource PrimaryBrush}" Margin="2" Opacity="0" />
                         </hc:SimplePanel>
                         <Border Height="16" Width="16" x:Name="border" CornerRadius="2" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" />
-                        <ContentPresenter x:Name="contentPresenter" Visibility="Collapsed" Grid.Column="1" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        <ContentPresenter x:Name="contentPresenter"
+                                          Visibility="Collapsed"
+                                          Grid.Column="1"
+                                          Focusable="False"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}"
+                                          RecognizesAccessKey="True"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="HasContent" Value="true">

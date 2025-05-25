@@ -88,11 +88,32 @@
                                 </MultiBinding>
                             </TextBlock.Visibility>
                         </TextBlock>
-                        <ContentPresenter WindowChrome.IsHitTestVisibleInChrome="True" Grid.Column="2" x:Name="ContentPresenterMain" Content="{TemplateBinding NonClientAreaContent}" />
+                        <ContentPresenter WindowChrome.IsHitTestVisibleInChrome="True"
+                                          Grid.Column="2"
+                                          x:Name="ContentPresenterMain"
+                                          Content="{TemplateBinding NonClientAreaContent}">
+                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                     </Grid>
                 </Grid>
                 <AdornerDecorator Grid.Row="1">
-                    <ContentPresenter ClipToBounds="True" />
+                    <ContentPresenter ClipToBounds="True">
+                        <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                        <ContentPresenter.Resources>
+                            <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                   TargetType="TextBlock">
+                                <Setter Property="Foreground"
+                                        Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                            </Style>
+                        </ContentPresenter.Resources>
+                    </ContentPresenter>
                 </AdornerDecorator>
                 <ResizeGrip Width="10" Height="10" x:Name="ResizeGrip" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="1" IsTabStop="False" Visibility="Collapsed" WindowChrome.ResizeGripDirection="BottomRight" />
             </Grid>
@@ -153,7 +174,16 @@
             <hc:SimplePanel Margin="{TemplateBinding Padding}">
                 <AdornerDecorator>
                     <hc:SimplePanel>
-                        <ContentPresenter ClipToBounds="True" />
+                        <ContentPresenter ClipToBounds="True">
+                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                         <Grid Background="{TemplateBinding NonClientAreaBackground}" Name="PART_NonClientArea" TextElement.Foreground="{TemplateBinding NonClientAreaForeground}" VerticalAlignment="Top">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition />
@@ -189,7 +219,19 @@
                                         </MultiBinding>
                                     </TextBlock.Visibility>
                                 </TextBlock>
-                                <ContentPresenter WindowChrome.IsHitTestVisibleInChrome="True" Grid.Column="2" x:Name="ContentPresenterMain" Content="{TemplateBinding NonClientAreaContent}" />
+                                <ContentPresenter WindowChrome.IsHitTestVisibleInChrome="True"
+                                                  Grid.Column="2"
+                                                  x:Name="ContentPresenterMain"
+                                                  Content="{TemplateBinding NonClientAreaContent}">
+                                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                    <ContentPresenter.Resources>
+                                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                               TargetType="TextBlock">
+                                            <Setter Property="Foreground"
+                                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                        </Style>
+                                    </ContentPresenter.Resources>
+                                </ContentPresenter>
                             </Grid>
                         </Grid>
                     </hc:SimplePanel>

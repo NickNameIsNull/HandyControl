@@ -28,7 +28,19 @@
                             <Border Background="{DynamicResource RegionBrush}" HorizontalAlignment="Center" CornerRadius="12" BorderThickness="2" BorderBrush="{TemplateBinding Foreground}" Height="24" MinWidth="24">
                                 <TextBlock Foreground="{TemplateBinding Foreground}" Style="{StaticResource TextBlockDefaultThiLight}" Text="{Binding Index,RelativeSource={RelativeSource TemplatedParent}}"/>
                             </Border>
-                            <ContentPresenter HorizontalAlignment="Center" ContentTemplate="{Binding ItemTemplate,RelativeSource={RelativeSource AncestorType=hc:StepBar}}" TextElement.Foreground="{TemplateBinding Foreground}" Margin="0,4,0,0"/>
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              ContentTemplate="{Binding ItemTemplate,RelativeSource={RelativeSource AncestorType=hc:StepBar}}"
+                                              TextElement.Foreground="{TemplateBinding Foreground}"
+                                              Margin="0,4,0,0">
+                                <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                            </ContentPresenter>
                         </StackPanel>
                     </Border>
                 </ControlTemplate>
@@ -42,7 +54,19 @@
             <Setter.Value>
                 <ControlTemplate TargetType="hc:StepBarItem">
                     <StackPanel>
-                        <ContentPresenter HorizontalAlignment="Center" ContentTemplate="{Binding ItemTemplate,RelativeSource={RelativeSource AncestorType=hc:StepBar}}" TextElement.Foreground="{TemplateBinding Foreground}" Margin="0,0,0,4"/>
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          ContentTemplate="{Binding ItemTemplate,RelativeSource={RelativeSource AncestorType=hc:StepBar}}"
+                                          TextElement.Foreground="{TemplateBinding Foreground}"
+                                          Margin="0,0,0,4">
+                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                         <Border Background="{DynamicResource RegionBrush}" HorizontalAlignment="Center" CornerRadius="12" BorderThickness="2" BorderBrush="{TemplateBinding Foreground}" Height="24" MinWidth="24">
                             <TextBlock Foreground="{TemplateBinding Foreground}" Style="{StaticResource TextBlockDefaultThiLight}" Text="{Binding Index,RelativeSource={RelativeSource TemplatedParent}}"/>
                         </Border>
@@ -61,7 +85,19 @@
                         <Border Background="{DynamicResource RegionBrush}" HorizontalAlignment="Center" CornerRadius="12" BorderThickness="2" BorderBrush="{TemplateBinding Foreground}" Height="24" MinWidth="24">
                             <TextBlock Foreground="{TemplateBinding Foreground}" Style="{StaticResource TextBlockDefaultThiLight}" Text="{Binding Index,RelativeSource={RelativeSource TemplatedParent}}"/>
                         </Border>
-                        <ContentPresenter HorizontalAlignment="Left" ContentTemplate="{Binding ItemTemplate,RelativeSource={RelativeSource AncestorType=hc:StepBar}}" TextElement.Foreground="{TemplateBinding Foreground}" Margin="10,4,0,0"/>
+                        <ContentPresenter HorizontalAlignment="Left"
+                                          ContentTemplate="{Binding ItemTemplate,RelativeSource={RelativeSource AncestorType=hc:StepBar}}"
+                                          TextElement.Foreground="{TemplateBinding Foreground}"
+                                          Margin="10,4,0,0">
+                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>

@@ -281,7 +281,13 @@ public class DateTimePicker : Control
     #endregion
 
     #region Public Methods
-
+    /// <summary>
+    /// Flag HandyControl 日历时钟控件
+    /// </summary>
+    public CalendarWithClock CalendarWithClock
+    {
+        get { return _calendarWithClock; }
+    }
     public override void OnApplyTemplate()
     {
         if (DesignerProperties.GetIsInDesignMode(this)) return;

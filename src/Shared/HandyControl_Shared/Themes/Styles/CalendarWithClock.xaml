@@ -29,8 +29,34 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
                             <Border Margin="4" CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}" Grid.ColumnSpan="2" Height="42" VerticalAlignment="Top" Background="{Binding Path=(hc:TitleElement.Background),RelativeSource={RelativeSource TemplatedParent}}"/>
-                            <ContentPresenter Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" x:Name="PART_CalendarPresenter" Margin="-8,-4,-8,-8"/>
-                            <ContentPresenter Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" x:Name="PART_ClockPresenter" Margin="-8,-4,-8,-8"/>
+                            <ContentPresenter Grid.Column="0"
+                                              Grid.Row="0"
+                                              Grid.RowSpan="2"
+                                              x:Name="PART_CalendarPresenter"
+                                              Margin="-8,-4,-8,-8">
+                                <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                <ContentPresenter.Resources>
+                                    <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                           TargetType="TextBlock">
+                                        <Setter Property="Foreground"
+                                                Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                    </Style>
+                                </ContentPresenter.Resources>
+                            </ContentPresenter>
+                            <ContentPresenter Grid.Column="1"
+                                              Grid.Row="0"
+                                              Grid.RowSpan="2"
+                                              x:Name="PART_ClockPresenter"
+                                              Margin="-8,-4,-8,-8">
+                                <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                <ContentPresenter.Resources>
+                                    <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                           TargetType="TextBlock">
+                                        <Setter Property="Foreground"
+                                                Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                    </Style>
+                                </ContentPresenter.Resources>
+                            </ContentPresenter>
                             <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Visibility="{TemplateBinding ShowConfirmButton,Converter={StaticResource Boolean2VisibilityConverter}}" Name="PART_ButtonConfirm" Content="{ex:Lang Key={x:Static langs:LangKeys.Confirm}}" HorizontalAlignment="Center" Margin="0,0,0,19" Width="180" VerticalAlignment="Bottom" Style="{StaticResource ButtonPrimary}"/>
                         </Grid>
                     </hc:SimplePanel>

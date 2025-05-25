@@ -331,7 +331,18 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RepeatButton">
-                    <ContentPresenter Content="{TemplateBinding Content}" Height="{TemplateBinding ActualHeight}" Width="{TemplateBinding ActualWidth}"/>
+                    <ContentPresenter Content="{TemplateBinding Content}"
+                                      Height="{TemplateBinding ActualHeight}"
+                                      Width="{TemplateBinding ActualWidth}">
+                        <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                        <ContentPresenter.Resources>
+                            <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                   TargetType="TextBlock">
+                                <Setter Property="Foreground"
+                                        Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                            </Style>
+                        </ContentPresenter.Resources>
+                    </ContentPresenter>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -415,12 +426,34 @@
             <hc:CompareTrack x:Name="PART_Track">
                 <Track.DecreaseRepeatButton>
                     <RepeatButton Command="{x:Static Slider.DecreaseLarge}" Style="{StaticResource CompareSliderRepeatButtonTransparent}">
-                        <ContentPresenter ContentSource="TargetContent" HorizontalAlignment="Left" Width="{TemplateBinding ActualWidth}"/>
+                        <ContentPresenter ContentSource="TargetContent"
+                                          HorizontalAlignment="Left"
+                                          Width="{TemplateBinding ActualWidth}">
+                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                     </RepeatButton>
                 </Track.DecreaseRepeatButton>
                 <Track.IncreaseRepeatButton>
                     <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Style="{StaticResource CompareSliderRepeatButtonTransparent}">
-                        <ContentPresenter ContentSource="SourceContent" HorizontalAlignment="Right" Width="{TemplateBinding ActualWidth}"/>
+                        <ContentPresenter ContentSource="SourceContent"
+                                          HorizontalAlignment="Right"
+                                          Width="{TemplateBinding ActualWidth}">
+                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                     </RepeatButton>
                 </Track.IncreaseRepeatButton>
                 <Track.Thumb>
@@ -511,12 +544,34 @@
             <hc:CompareTrack x:Name="PART_Track">
                 <Track.DecreaseRepeatButton>
                     <RepeatButton Command="{x:Static Slider.DecreaseLarge}" Style="{StaticResource CompareSliderRepeatButtonTransparent}">
-                        <ContentPresenter ContentSource="TargetContent" VerticalAlignment="Bottom" Height="{TemplateBinding ActualHeight}"/>
+                        <ContentPresenter ContentSource="TargetContent"
+                                          VerticalAlignment="Bottom"
+                                          Height="{TemplateBinding ActualHeight}">
+                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                     </RepeatButton>
                 </Track.DecreaseRepeatButton>
                 <Track.IncreaseRepeatButton>
                     <RepeatButton Command="{x:Static Slider.IncreaseLarge}" Style="{StaticResource CompareSliderRepeatButtonTransparent}">
-                        <ContentPresenter ContentSource="SourceContent" VerticalAlignment="Top" Height="{TemplateBinding ActualHeight}"/>
+                        <ContentPresenter ContentSource="SourceContent"
+                                          VerticalAlignment="Top"
+                                          Height="{TemplateBinding ActualHeight}">
+                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                     </RepeatButton>
                 </Track.IncreaseRepeatButton>
                 <Track.Thumb>

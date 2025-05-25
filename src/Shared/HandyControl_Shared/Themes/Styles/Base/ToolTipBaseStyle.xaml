@@ -12,7 +12,16 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ToolTip">
                     <Border Effect="{StaticResource EffectShadow2}" Margin="8" Background="{DynamicResource RegionBrush}" Padding="{TemplateBinding Padding}" BorderThickness="1" CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}" BorderBrush="{DynamicResource BorderBrush}">
-                        <ContentPresenter Margin="10,0"/>
+                        <ContentPresenter Margin="10,0">
+                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

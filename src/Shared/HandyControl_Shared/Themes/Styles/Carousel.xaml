@@ -9,7 +9,17 @@
             <Setter.Value>
                 <ControlTemplate TargetType="hc:CarouselItem">
                     <Border BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}">
-                        <ContentPresenter Margin="{TemplateBinding Padding}" ContentTemplate="{Binding ItemTemplate,RelativeSource={RelativeSource AncestorType=hc:Carousel}}"/>
+                        <ContentPresenter Margin="{TemplateBinding Padding}"
+                                          ContentTemplate="{Binding ItemTemplate,RelativeSource={RelativeSource AncestorType=hc:Carousel}}">
+                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

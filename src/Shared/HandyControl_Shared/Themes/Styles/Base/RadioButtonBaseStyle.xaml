@@ -60,7 +60,24 @@
                             </Ellipse>
                         </Border>
                         <Border x:Name="border" Grid.Column="0" Height="16" Width="16" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="8" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                        <ContentPresenter x:Name="contentPresenter" Visibility="Collapsed" Grid.Column="1" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        <ContentPresenter x:Name="contentPresenter"
+                                          Visibility="Collapsed"
+                                          Grid.Column="1"
+                                          Focusable="False"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}"
+                                          RecognizesAccessKey="True"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="HasContent" Value="true">
@@ -114,7 +131,20 @@
                         <Border BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="{TemplateBinding Padding}">
                                 <Path x:Name="PathMain" Width="{TemplateBinding hc:IconElement.Width}" Height="{TemplateBinding hc:IconElement.Height}" Fill="{TemplateBinding Foreground}" SnapsToDevicePixels="True" Stretch="Uniform" Data="{TemplateBinding hc:IconElement.Geometry}" />
-                                <ContentPresenter x:Name="ContentPresenterMain" RecognizesAccessKey="True" VerticalAlignment="Center" Margin="6,0,0,0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                <ContentPresenter x:Name="ContentPresenterMain"
+                                                  RecognizesAccessKey="True"
+                                                  VerticalAlignment="Center"
+                                                  Margin="6,0,0,0"
+                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                    <ContentPresenter.Resources>
+                                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                               TargetType="TextBlock">
+                                            <Setter Property="Foreground"
+                                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                        </Style>
+                                    </ContentPresenter.Resources>
+                                </ContentPresenter>
                             </StackPanel>
                         </Border>
                         <Border Margin="-1" Visibility="Collapsed" CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}" x:Name="BorderChecked" BorderThickness="4" BorderBrush="{DynamicResource DarkMaskBrush}" />
@@ -161,7 +191,20 @@
                         <Border CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="{TemplateBinding Padding}">
                                 <Path x:Name="PathMain" Height="{Binding Path=(hc:IconElement.Height),RelativeSource={RelativeSource TemplatedParent}}" Width="{Binding Path=(hc:IconElement.Width),RelativeSource={RelativeSource TemplatedParent}}" Fill="{TemplateBinding Foreground}" SnapsToDevicePixels="True" Stretch="Uniform" Data="{TemplateBinding hc:IconElement.Geometry}" />
-                                <ContentPresenter x:Name="ContentPresenterMain" RecognizesAccessKey="True" VerticalAlignment="Center" Margin="6,0,0,0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                <ContentPresenter x:Name="ContentPresenterMain"
+                                                  RecognizesAccessKey="True"
+                                                  VerticalAlignment="Center"
+                                                  Margin="6,0,0,0"
+                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                    <ContentPresenter.Resources>
+                                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                               TargetType="TextBlock">
+                                            <Setter Property="Foreground"
+                                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                        </Style>
+                                    </ContentPresenter.Resources>
+                                </ContentPresenter>
                             </StackPanel>
                         </Border>
                         <Border Name="BorderHighlight" BorderThickness="3,0,0,0" BorderBrush="Transparent" />
@@ -213,7 +256,20 @@
                     <Border x:Name="BorderRoot" CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="{TemplateBinding Padding}">
                             <Path x:Name="PathMain" Height="{Binding Path=(hc:IconElement.Height),RelativeSource={RelativeSource TemplatedParent}}" Width="{Binding Path=(hc:IconElement.Width),RelativeSource={RelativeSource TemplatedParent}}" Fill="{Binding Path=(TextElement.Foreground),ElementName=contentPresenter}" SnapsToDevicePixels="True" Stretch="Uniform" Data="{TemplateBinding hc:IconElement.Geometry}" />
-                            <ContentPresenter x:Name="contentPresenter" RecognizesAccessKey="True" VerticalAlignment="Center" Margin="6,0,0,0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            <ContentPresenter x:Name="contentPresenter"
+                                              RecognizesAccessKey="True"
+                                              VerticalAlignment="Center"
+                                              Margin="6,0,0,0"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                <ContentPresenter.Resources>
+                                    <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                           TargetType="TextBlock">
+                                        <Setter Property="Foreground"
+                                                Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                    </Style>
+                                </ContentPresenter.Resources>
+                            </ContentPresenter>
                         </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>

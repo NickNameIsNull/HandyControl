@@ -63,7 +63,17 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <ContentPresenter Name="Presenter" VerticalAlignment="Center"/>
+                    <ContentPresenter Name="Presenter"
+                                      VerticalAlignment="Center">
+                        <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                        <ContentPresenter.Resources>
+                            <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                   TargetType="TextBlock">
+                                <Setter Property="Foreground"
+                                        Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                            </Style>
+                        </ContentPresenter.Resources>
+                    </ContentPresenter>
                     <Path Name="Audio" Grid.Column="1" Data="{StaticResource AudioGeometry}" Fill="{TemplateBinding Foreground}" Width="16" Height="16" Margin="6,0,0,0" RenderTransformOrigin="0.5,0.5">
                         <Path.RenderTransform>
                             <TransformGroup>
@@ -109,7 +119,17 @@
         <hc:SimplePanel>
             <Path Name="Tail"  Data="{StaticResource BubbleTailGeometry}" Fill="{TemplateBinding Background}" HorizontalAlignment="Right" Stretch="Uniform" VerticalAlignment="Bottom" Width="15" Height="15" RenderTransformOrigin="0.5,0.5"/>
             <Border Name="Body" Background="{TemplateBinding Background}" CornerRadius="15" Margin="0,0,3,0">
-                <ContentPresenter VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                <ContentPresenter VerticalAlignment="Center"
+                                  Margin="{TemplateBinding Padding}">
+                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                    <ContentPresenter.Resources>
+                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                               TargetType="TextBlock">
+                            <Setter Property="Foreground"
+                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                        </Style>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
             </Border>
         </hc:SimplePanel>
         <ControlTemplate.Triggers>

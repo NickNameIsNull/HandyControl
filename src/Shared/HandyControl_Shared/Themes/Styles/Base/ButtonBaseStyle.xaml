@@ -15,10 +15,10 @@
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="{TemplateBinding Padding}">
                                 <Path x:Name="PathMain" Width="{TemplateBinding hc:IconElement.Width}" Height="{TemplateBinding hc:IconElement.Height}" Fill="{TemplateBinding Foreground}" SnapsToDevicePixels="True" Stretch="Uniform" Data="{TemplateBinding hc:IconElement.Geometry}"/>
                                 <ContentPresenter x:Name="ContentPresenterMain" RecognizesAccessKey="True" VerticalAlignment="Center" Margin="6,0,0,0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
                                     <ContentPresenter.Resources>
                                         <Style BasedOn="{StaticResource TextBlockDefault}"
                                                TargetType="{x:Type TextBlock}">
-                                            <!--  Flag,使用Syncfusion后样式冲突，添加该代码控制样式  -->
                                             <Setter Property="Foreground" Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
                                         </Style>
                                     </ContentPresenter.Resources>

@@ -11,9 +11,41 @@
                 <ControlTemplate TargetType="hc:ToggleBlock">
                     <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
                         <hc:SimplePanel Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}">
-                            <ContentPresenter Name="ContentPresenterChecked" ContentSource="CheckedContent" Visibility="Collapsed"/>
-                            <ContentPresenter Name="ContentPresenterUnChecked" ContentSource="UnCheckedContent"/>
-                            <ContentPresenter Name="ContentPresenterIndeterminate" ContentSource="IndeterminateContent" Visibility="Collapsed"/>
+                            <ContentPresenter Name="ContentPresenterChecked"
+                                              ContentSource="CheckedContent"
+                                              Visibility="Collapsed">
+                                <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                <ContentPresenter.Resources>
+                                    <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                           TargetType="TextBlock">
+                                        <Setter Property="Foreground"
+                                                Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                    </Style>
+                                </ContentPresenter.Resources>
+                            </ContentPresenter>
+                            <ContentPresenter Name="ContentPresenterUnChecked"
+                                              ContentSource="UnCheckedContent">
+                                <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                <ContentPresenter.Resources>
+                                    <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                           TargetType="TextBlock">
+                                        <Setter Property="Foreground"
+                                                Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                    </Style>
+                                </ContentPresenter.Resources>
+                            </ContentPresenter>
+                            <ContentPresenter Name="ContentPresenterIndeterminate"
+                                              ContentSource="IndeterminateContent"
+                                              Visibility="Collapsed">
+                                <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                <ContentPresenter.Resources>
+                                    <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                           TargetType="TextBlock">
+                                        <Setter Property="Foreground"
+                                                Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                    </Style>
+                                </ContentPresenter.Resources>
+                            </ContentPresenter>
                         </hc:SimplePanel>
                     </Border>
                     <ControlTemplate.Triggers>

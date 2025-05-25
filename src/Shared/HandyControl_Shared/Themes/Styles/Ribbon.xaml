@@ -33,7 +33,24 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <ItemsPresenter Grid.ColumnSpan="2" Margin="{TemplateBinding Padding}"/>
-                        <ContentPresenter Name="ContentPresenter"  VerticalAlignment="Bottom" TextElement.Foreground="{DynamicResource SecondaryTextBrush}" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,10,2" ContentSource="Header" HorizontalAlignment="Center" Grid.Row="1"/>
+                        <ContentPresenter Name="ContentPresenter"
+                                          VerticalAlignment="Bottom"
+                                          TextElement.Foreground="{DynamicResource SecondaryTextBrush}"
+                                          Grid.Column="0"
+                                          Grid.ColumnSpan="2"
+                                          Margin="10,0,10,2"
+                                          ContentSource="Header"
+                                          HorizontalAlignment="Center"
+                                          Grid.Row="1">
+                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                         <Button hc:Poptip.Instance="{TemplateBinding LauncherPoptip}" Command="interactivity:ControlCommands.More" Visibility="{Binding ShowLauncherButton,RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}" Margin="0,0,2,0" Grid.Column="1" Width="16" Height="16" Grid.Row="1" HorizontalAlignment="Right" Style="{StaticResource ButtonCustom}" hc:BackgroundSwitchElement.MouseHoverBackground="{DynamicResource SecondaryRegionBrush}">
                             <Path Width="9" Height="9" Stretch="Uniform" Data="{StaticResource DialogBoxLauncherGeometry}" Fill="{DynamicResource SecondaryTextBrush}"/>
                         </Button>
@@ -65,7 +82,22 @@
                     <Border Background="{TemplateBinding Background}">
                         <hc:SimplePanel x:Name="templateRoot" SnapsToDevicePixels="true">
                             <Border x:Name="BorderBottom" Visibility="{Binding IsSelected,RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource Boolean2VisibilityConverter}}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0,0,0,2" Margin="12,0,12,2"/>
-                            <ContentPresenter x:Name="ContentPresenter" Focusable="False" HorizontalAlignment="Center" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
+                            <ContentPresenter x:Name="ContentPresenter"
+                                              Focusable="False"
+                                              HorizontalAlignment="Center"
+                                              Margin="{TemplateBinding Padding}"
+                                              RecognizesAccessKey="True"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              VerticalAlignment="Center">
+                                <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                                <ContentPresenter.Resources>
+                                    <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                           TargetType="TextBlock">
+                                        <Setter Property="Foreground"
+                                                Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                    </Style>
+                                </ContentPresenter.Resources>
+                            </ContentPresenter>
                         </hc:SimplePanel>
                     </Border>
                 </ControlTemplate>
@@ -145,7 +177,18 @@
                             <ItemsPresenter x:Name="PART_TabItemsPresenter" VerticalAlignment="Bottom" Height="{TemplateBinding ContentHeight}" Grid.Column="0" Margin="{Binding Padding, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource ThicknessSplitConverter}, ConverterParameter='1,0,0,0'}"/>
                             <ToggleButton Command="interactivity:ControlCommands.Switch" IsChecked="{Binding IsMinimized, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" Margin="{Binding Padding, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource ThicknessSplitConverter}, ConverterParameter='0,0,1,0'}" Padding="2 0" Width="16" Height="20" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Style="{StaticResource ToggleButtonIconTransparent}" hc:IconElement.Geometry="{StaticResource UpGeometry}" hc:IconSwitchElement.GeometrySelected="{StaticResource NailGeometry}"/>
                         </Grid>
-                        <ContentPresenter Grid.Row="0" Grid.Column="0" ContentSource="PrefixContent"/>
+                        <ContentPresenter Grid.Row="0"
+                                          Grid.Column="0"
+                                          ContentSource="PrefixContent">
+                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                         <hc:RibbonTabHeaderItemsControl Grid.Row="0" Grid.Column="1" Background="{TemplateBinding Background}" Focusable="False" x:Name="PART_TabHeaderItemsControl" Margin="0,0,0,2">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -153,7 +196,18 @@
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                         </hc:RibbonTabHeaderItemsControl>
-                        <ContentPresenter Grid.Row="0" Grid.Column="2" ContentSource="PostfixContent"/>
+                        <ContentPresenter Grid.Row="0"
+                                          Grid.Column="2"
+                                          ContentSource="PostfixContent">
+                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                     </hc:ClipGrid>
                 </ControlTemplate>
             </Setter.Value>

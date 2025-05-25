@@ -13,7 +13,18 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="hc:Notification">
-                    <ContentPresenter Margin="{TemplateBinding Padding}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <ContentPresenter Margin="{TemplateBinding Padding}"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center">
+                        <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                        <ContentPresenter.Resources>
+                            <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                   TargetType="TextBlock">
+                                <Setter Property="Foreground"
+                                        Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                            </Style>
+                        </ContentPresenter.Resources>
+                    </ContentPresenter>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

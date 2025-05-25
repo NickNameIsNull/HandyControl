@@ -1,17 +1,28 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:hc="clr-namespace:HandyControl.Controls"
+                    xmlns:interactivity="clr-namespace:HandyControl.Interactivity"
+                    xmlns:langs="clr-namespace:HandyControl.Properties.Langs"
                     xmlns:tools="clr-namespace:HandyControl.Tools">
 
-    <Style x:Key="CalendarButtonStyle" TargetType="CalendarButton">
-        <Setter Property="MinWidth" Value="10"/>
-        <Setter Property="MinHeight" Value="10"/>
-        <Setter Property="FontSize" Value="12"/>
-        <Setter Property="Width" Value="40"/>
-        <Setter Property="Height" Value="32"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+    <Style x:Key="CalendarButtonStyle"
+           TargetType="CalendarButton">
+        <Setter Property="MinWidth"
+                Value="10" />
+        <Setter Property="MinHeight"
+                Value="10" />
+        <Setter Property="FontSize"
+                Value="12" />
+        <Setter Property="Width"
+                Value="40" />
+        <Setter Property="Height"
+                Value="32" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Center" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+        <Setter Property="FocusVisualStyle"
+                Value="{x:Null}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="CalendarButton">
@@ -19,61 +30,104 @@
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="SelectionStates">
                                 <VisualStateGroup.Transitions>
-                                    <VisualTransition GeneratedDuration="0"/>
+                                    <VisualTransition GeneratedDuration="0" />
                                 </VisualStateGroup.Transitions>
-                                <VisualState x:Name="Unselected"/>
+                                <VisualState x:Name="Unselected" />
                                 <VisualState x:Name="Selected">
                                     <Storyboard>
-                                        <DoubleAnimation Duration="0:0:.2" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SelectedBackground"/>
-                                        <ColorAnimation Duration="0" To="White" Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="NormalText"/>
+                                        <DoubleAnimation Duration="0:0:.2"
+                                                         To="1"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         Storyboard.TargetName="SelectedBackground" />
+                                        <ColorAnimation Duration="0"
+                                                        To="White"
+                                                        Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)"
+                                                        Storyboard.TargetName="NormalText" />
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
                             <VisualStateGroup x:Name="ActiveStates">
                                 <VisualStateGroup.Transitions>
-                                    <VisualTransition GeneratedDuration="0"/>
+                                    <VisualTransition GeneratedDuration="0" />
                                 </VisualStateGroup.Transitions>
-                                <VisualState x:Name="Active"/>
+                                <VisualState x:Name="Active" />
                                 <VisualState x:Name="Inactive">
                                     <Storyboard>
-                                        <ColorAnimation Duration="0" To="{DynamicResource ThirdlyTextColor}" Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="NormalText"/>
+                                        <ColorAnimation Duration="0"
+                                                        To="{DynamicResource ThirdlyTextColor}"
+                                                        Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)"
+                                                        Storyboard.TargetName="NormalText" />
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                        <Rectangle x:Name="SelectedBackground" Fill="{DynamicResource DangerBrush}" Opacity="0" RadiusY="16" RadiusX="16"/>
-                        <Rectangle x:Name="Background" Fill="{TemplateBinding Background}" Opacity="0" RadiusY="16" RadiusX="16"/>
-                        <ContentPresenter x:Name="NormalText" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                        <Rectangle x:Name="SelectedBackground"
+                                   Fill="{DynamicResource SuccessBrush}"
+                                   Opacity="0"
+                                   RadiusY="16"
+                                   RadiusX="16" />
+                        <Rectangle x:Name="Background"
+                                   Fill="{TemplateBinding Background}"
+                                   Opacity="0"
+                                   RadiusY="16"
+                                   RadiusX="16" />
+                        <ContentPresenter x:Name="NormalText"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
                             <TextElement.Foreground>
-                                <SolidColorBrush Color="{DynamicResource PrimaryTextColor}"/>
+                                <SolidColorBrush Color="{DynamicResource PrimaryTextColor}" />
                             </TextElement.Foreground>
+                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Style>
+                            </ContentPresenter.Resources>
                         </ContentPresenter>
-                        <Rectangle x:Name="CalendarButtonFocusVisual" IsHitTestVisible="false" RadiusY="16" RadiusX="16" Stroke="{DynamicResource PrimaryBrush}" Visibility="Collapsed"/>
+                        <Rectangle x:Name="CalendarButtonFocusVisual"
+                                   IsHitTestVisible="false"
+                                   RadiusY="16"
+                                   RadiusX="16"
+                                   Stroke="{DynamicResource PrimaryBrush}"
+                                   Visibility="Collapsed" />
                     </hc:SimplePanel>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsFocused" Value="True">
-                            <Setter Property="Visibility" TargetName="CalendarButtonFocusVisual" Value="Visible"/>
+                        <Trigger Property="IsFocused"
+                                 Value="True">
+                            <Setter Property="Visibility"
+                                    TargetName="CalendarButtonFocusVisual"
+                                    Value="Visible" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-    
-    <Style x:Key="CalendarDayButtonStyle" BasedOn="{StaticResource BaseStyle}" TargetType="CalendarDayButton">
-        <Setter Property="MinWidth" Value="10"/>
-        <Setter Property="MinHeight" Value="10"/>
-        <Setter Property="Width" Value="32"/>
-        <Setter Property="Height" Value="32"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
+
+    <Style x:Key="CalendarDayButtonStyle"
+           BasedOn="{StaticResource BaseStyle}"
+           TargetType="CalendarDayButton">
+        <Setter Property="MinWidth"
+                Value="10" />
+        <Setter Property="MinHeight"
+                Value="10" />
+        <Setter Property="Width"
+                Value="32" />
+        <Setter Property="Height"
+                Value="32" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Center" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
         <Setter Property="FocusVisualStyle">
             <Setter.Value>
                 <Style>
                     <Setter Property="Control.Template">
                         <Setter.Value>
                             <ControlTemplate>
-                                <Rectangle Style="{StaticResource RectangleFocusVisualCircular}"/>
+                                <Rectangle Style="{StaticResource RectangleFocusVisualCircular}" />
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -87,56 +141,92 @@
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualStateGroup.Transitions>
-                                    <VisualTransition GeneratedDuration="0:0:0.1"/>
+                                    <VisualTransition GeneratedDuration="0:0:0.1" />
                                 </VisualStateGroup.Transitions>
-                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="Normal" />
                                 <VisualState x:Name="Disabled">
                                     <Storyboard>
-                                        <DoubleAnimation Duration="0" To=".35" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="NormalText"/>
+                                        <DoubleAnimation Duration="0"
+                                                         To=".35"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         Storyboard.TargetName="NormalText" />
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
                             <VisualStateGroup x:Name="SelectionStates">
                                 <VisualStateGroup.Transitions>
-                                    <VisualTransition GeneratedDuration="0"/>
+                                    <VisualTransition GeneratedDuration="0" />
                                 </VisualStateGroup.Transitions>
-                                <VisualState x:Name="Unselected"/>
+                                <VisualState x:Name="Unselected" />
                                 <VisualState x:Name="Selected">
                                     <Storyboard>
-                                        <DoubleAnimation Duration="0:0:.2" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SelectedBackground"/>
-                                        <ColorAnimation Duration="0" To="White" Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="NormalText"/>
+                                        <DoubleAnimation Duration="0:0:.2"
+                                                         To="1"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         Storyboard.TargetName="SelectedBackground" />
+                                        <ColorAnimation Duration="0"
+                                                        To="White"
+                                                        Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)"
+                                                        Storyboard.TargetName="NormalText" />
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
                             <VisualStateGroup x:Name="ActiveStates">
                                 <VisualStateGroup.Transitions>
-                                    <VisualTransition GeneratedDuration="0"/>
+                                    <VisualTransition GeneratedDuration="0" />
                                 </VisualStateGroup.Transitions>
-                                <VisualState x:Name="Active"/>
+                                <VisualState x:Name="Active" />
                                 <VisualState x:Name="Inactive">
                                     <Storyboard>
-                                        <ColorAnimation Duration="0" To="{DynamicResource ThirdlyTextColor}" Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="NormalText"/>
+                                        <ColorAnimation Duration="0"
+                                                        To="{DynamicResource ThirdlyTextColor}"
+                                                        Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)"
+                                                        Storyboard.TargetName="NormalText" />
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
                             <VisualStateGroup x:Name="DayStates">
                                 <VisualStateGroup.Transitions>
-                                    <VisualTransition GeneratedDuration="0"/>
+                                    <VisualTransition GeneratedDuration="0" />
                                 </VisualStateGroup.Transitions>
-                                <VisualState x:Name="RegularDay"/>
+                                <VisualState x:Name="RegularDay" />
                                 <VisualState x:Name="Today">
                                     <Storyboard>
-                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="TodayBackground"/>
-                                        <ColorAnimation Duration="0" To="White" Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="NormalText"/>
+                                        <DoubleAnimation Duration="0"
+                                                         To="1"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         Storyboard.TargetName="TodayBackground" />
+                                        <ColorAnimation Duration="0"
+                                                        To="White"
+                                                        Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)"
+                                                        Storyboard.TargetName="NormalText" />
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                        <Rectangle RadiusX="16" RadiusY="16" x:Name="TodayBackground" Fill="{DynamicResource DangerBrush}" Opacity="0"/>
-                        <Rectangle x:Name="SelectedBackground" Fill="{DynamicResource PrimaryBrush}" Opacity="0" RadiusY="16" RadiusX="16"/>
-                        <ContentPresenter x:Name="NormalText" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                        <Rectangle RadiusX="16"
+                                   RadiusY="16"
+                                   x:Name="TodayBackground"
+                                   Fill="{DynamicResource SuccessBrush}"
+                                   Opacity="0" />
+                        <Rectangle x:Name="SelectedBackground"
+                                   Fill="{DynamicResource PrimaryBrush}"
+                                   Opacity="0"
+                                   RadiusY="16"
+                                   RadiusX="16" />
+                        <ContentPresenter x:Name="NormalText"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Style>
+                            </ContentPresenter.Resources>
                             <TextElement.Foreground>
-                                <SolidColorBrush Color="{DynamicResource PrimaryTextColor}"/>
+                                <SolidColorBrush Color="{DynamicResource PrimaryTextColor}" />
                             </TextElement.Foreground>
                         </ContentPresenter>
                     </hc:SimplePanel>
@@ -146,85 +236,154 @@
     </Style>
 
     <Style TargetType="CalendarItem">
-        <Setter Property="Margin" Value="0"/>
-        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Margin"
+                Value="0" />
+        <Setter Property="Focusable"
+                Value="False" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="CalendarItem">
                     <ControlTemplate.Resources>
                         <DataTemplate x:Key="{x:Static CalendarItem.DayTitleTemplateResourceKey}">
-                            <TextBlock Foreground="{DynamicResource PrimaryTextBrush}" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,6,0,6" Text="{Binding}" VerticalAlignment="Center"/>
+                            <TextBlock Foreground="{DynamicResource PrimaryTextBrush}"
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,6,0,6"
+                                       Text="{Binding}"
+                                       VerticalAlignment="Center" />
                         </DataTemplate>
                     </ControlTemplate.Resources>
                     <hc:SimplePanel x:Name="PART_Root">
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
-                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="Normal" />
                                 <VisualState x:Name="Disabled">
                                     <Storyboard>
-                                        <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="PART_DisabledVisual"/>
+                                        <DoubleAnimation Duration="0"
+                                                         To="1"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         Storyboard.TargetName="PART_DisabledVisual" />
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <Border Margin="4" CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}" Background="{Binding Path=(hc:TitleElement.Background),RelativeSource={RelativeSource TemplatedParent}}" Grid.ColumnSpan="3"/>
-                            <Button x:Name="PART_PreviousButton" Width="50" Foreground="{Binding Path=(hc:TitleElement.Foreground),RelativeSource={RelativeSource TemplatedParent}}" HorizontalAlignment="Left" Grid.Column="0" Height="50" Padding="16" Focusable="False" Grid.Row="0" Style="{StaticResource ButtonIcon}" hc:IconElement.Geometry="{StaticResource LeftGeometry}"/>
-                            <Button x:Name="PART_HeaderButton" Focusable="False" Foreground="{Binding Path=(hc:TitleElement.Foreground),RelativeSource={RelativeSource TemplatedParent}}" Grid.Column="1" FontSize="20" HorizontalAlignment="Center" Grid.Row="0" Style="{StaticResource ButtonCustom}"/>
-                            <Button x:Name="PART_NextButton" Width="50" Foreground="{Binding Path=(hc:TitleElement.Foreground),RelativeSource={RelativeSource TemplatedParent}}" HorizontalAlignment="Right" Height="50" Padding="16" Grid.Column="2" Focusable="False" Grid.Row="0" Style="{StaticResource ButtonIcon}" hc:IconElement.Geometry="{StaticResource RightGeometry}"/>
-                            <Grid Width="240" Height="240" x:Name="PART_MonthView" Margin="10,6,10,10" Grid.ColumnSpan="3" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Visibility="Visible">
+                            <Border Margin="4"
+                                    CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}"
+                                    Background="{Binding Path=(hc:TitleElement.Background),RelativeSource={RelativeSource TemplatedParent}}"
+                                    Grid.ColumnSpan="3" />
+                            <Button x:Name="PART_PreviousButton"
+                                    Width="50"
+                                    Foreground="{Binding Path=(hc:TitleElement.Foreground),RelativeSource={RelativeSource TemplatedParent}}"
+                                    HorizontalAlignment="Left"
+                                    Grid.Column="0"
+                                    Height="50"
+                                    Padding="16"
+                                    Focusable="False"
+                                    Grid.Row="0"
+                                    Style="{StaticResource ButtonIcon}"
+                                    hc:IconElement.Geometry="{StaticResource LeftGeometry}" />
+                            <Button x:Name="PART_HeaderButton"
+                                    Focusable="False"
+                                    Foreground="{Binding Path=(hc:TitleElement.Foreground),RelativeSource={RelativeSource TemplatedParent}}"
+                                    Grid.Column="1"
+                                    FontSize="20"
+                                    HorizontalAlignment="Center"
+                                    Grid.Row="0"
+                                    Style="{StaticResource ButtonCustom}" />
+                            <Button x:Name="PART_NextButton"
+                                    Width="50"
+                                    Foreground="{Binding Path=(hc:TitleElement.Foreground),RelativeSource={RelativeSource TemplatedParent}}"
+                                    HorizontalAlignment="Right"
+                                    Height="50"
+                                    Padding="16"
+                                    Grid.Column="2"
+                                    Focusable="False"
+                                    Grid.Row="0"
+                                    Style="{StaticResource ButtonIcon}"
+                                    hc:IconElement.Geometry="{StaticResource RightGeometry}" />
+                            <Grid Width="240"
+                                  Height="240"
+                                  x:Name="PART_MonthView"
+                                  Margin="10,6,10,10"
+                                  Grid.ColumnSpan="3"
+                                  Grid.Column="0"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  Grid.Row="1"
+                                  Visibility="Visible">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
                                 </Grid.RowDefinitions>
                             </Grid>
-                            <Grid Width="240" Height="240" x:Name="PART_YearView" Margin="10,6,10,10" Grid.ColumnSpan="3" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1" Visibility="Hidden">
+                            <Grid Width="240"
+                                  Height="240"
+                                  x:Name="PART_YearView"
+                                  Margin="10,6,10,10"
+                                  Grid.ColumnSpan="3"
+                                  Grid.Column="0"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  Grid.Row="1"
+                                  Visibility="Hidden">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
                                 </Grid.RowDefinitions>
                             </Grid>
                         </Grid>
-                        <Rectangle x:Name="PART_DisabledVisual" Visibility="Collapsed"/>
+                        <Rectangle x:Name="PART_DisabledVisual"
+                                   Visibility="Collapsed" />
                     </hc:SimplePanel>
                     <ControlTemplate.Triggers>
-                        <DataTrigger Binding="{Binding DisplayMode, RelativeSource={RelativeSource  AncestorType=Calendar}}" Value="Year">
-                            <Setter Property="Visibility" TargetName="PART_MonthView" Value="Hidden"/>
-                            <Setter Property="Visibility" TargetName="PART_YearView" Value="Visible"/>
+                        <DataTrigger Binding="{Binding DisplayMode, RelativeSource={RelativeSource  AncestorType=Calendar}}"
+                                     Value="Year">
+                            <Setter Property="Visibility"
+                                    TargetName="PART_MonthView"
+                                    Value="Hidden" />
+                            <Setter Property="Visibility"
+                                    TargetName="PART_YearView"
+                                    Value="Visible" />
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding DisplayMode, RelativeSource={RelativeSource  AncestorType=Calendar}}" Value="Decade">
-                            <Setter Property="Visibility" TargetName="PART_MonthView" Value="Hidden"/>
-                            <Setter Property="Visibility" TargetName="PART_YearView" Value="Visible"/>
+                        <DataTrigger Binding="{Binding DisplayMode, RelativeSource={RelativeSource  AncestorType=Calendar}}"
+                                     Value="Decade">
+                            <Setter Property="Visibility"
+                                    TargetName="PART_MonthView"
+                                    Value="Hidden" />
+                            <Setter Property="Visibility"
+                                    TargetName="PART_YearView"
+                                    Value="Visible" />
                         </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -232,30 +391,320 @@
         </Setter>
     </Style>
 
-    <Style x:Key="CalendarBaseStyle" TargetType="Calendar">
-        <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
-        <Setter Property="Background" Value="{DynamicResource RegionBrush}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
-        <Setter Property="Language" Value="{Binding Lang,Source={x:Static tools:ConfigHelper.Instance}}"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Margin" Value="8 0"/>
-        <Setter Property="CalendarDayButtonStyle" Value="{StaticResource CalendarDayButtonStyle}"/>
-        <Setter Property="CalendarButtonStyle" Value="{StaticResource CalendarButtonStyle}"/>
-        <Setter Property="hc:TitleElement.Background" Value="{DynamicResource TitleBrush}"/>
-        <Setter Property="hc:TitleElement.Foreground" Value="{DynamicResource TextIconBrush}"/>
-        <Setter Property="hc:BorderElement.CornerRadius" Value="{StaticResource DefaultCornerRadius}"/>
+    <!-- Flag HandyControl 日历添加快捷选择日期 -->
+    <Style x:Key="HandyControlCalendarItemBaseStyle"
+           TargetType="CalendarItem">
+        <Setter Property="Margin"
+                Value="0" />
+        <Setter Property="Focusable"
+                Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CalendarItem">
+                    <ControlTemplate.Resources>
+                        <DataTemplate x:Key="{x:Static CalendarItem.DayTitleTemplateResourceKey}">
+                            <TextBlock Margin="0,6,0,6"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       FontWeight="Bold"
+                                       Foreground="{DynamicResource PrimaryTextBrush}"
+                                       Text="{Binding}" />
+                        </DataTemplate>
+                    </ControlTemplate.Resources>
+                    <hc:SimplePanel x:Name="PART_Root">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Border Grid.ColumnSpan="3"
+                                    Margin="4"
+                                    Background="{Binding Path=(hc:TitleElement.Background), RelativeSource={RelativeSource TemplatedParent}}"
+                                    CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}" />
+                            <Button x:Name="PART_PreviousButton"
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Width="50"
+                                    Height="50"
+                                    Padding="16"
+                                    HorizontalAlignment="Left"
+                                    hc:IconElement.Geometry="{StaticResource LeftGeometry}"
+                                    Focusable="False"
+                                    Foreground="{Binding Path=(hc:TitleElement.Foreground), RelativeSource={RelativeSource TemplatedParent}}"
+                                    Style="{StaticResource ButtonIcon}" />
+                            <Button x:Name="PART_HeaderButton"
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Center"
+                                    Cursor="Hand"
+                                    Focusable="False"
+                                    FontSize="20"
+                                    Foreground="{Binding Path=(hc:TitleElement.Foreground), RelativeSource={RelativeSource TemplatedParent}}"
+                                    Style="{StaticResource ButtonCustom}" />
+                            <Button x:Name="PART_NextButton"
+                                    Grid.Row="0"
+                                    Grid.Column="2"
+                                    Width="50"
+                                    Height="50"
+                                    Padding="16"
+                                    HorizontalAlignment="Right"
+                                    hc:IconElement.Geometry="{StaticResource RightGeometry}"
+                                    Focusable="False"
+                                    Foreground="{Binding Path=(hc:TitleElement.Foreground), RelativeSource={RelativeSource TemplatedParent}}"
+                                    Style="{StaticResource ButtonIcon}" />
+                            <Grid x:Name="PART_MonthView"
+                                  Grid.Row="1"
+                                  Grid.Column="0"
+                                  Grid.ColumnSpan="3"
+                                  Width="240"
+                                  Height="240"
+                                  Margin="10,21,10,25"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  Visibility="Visible">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                            </Grid>
+                            <Grid x:Name="PART_YearView"
+                                  Grid.Row="1"
+                                  Grid.Column="0"
+                                  Grid.ColumnSpan="3"
+                                  Width="240"
+                                  Height="240"
+                                  Margin="10,6,10,10"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  Visibility="Hidden">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                            </Grid>
+                        </Grid>
+                        <Rectangle x:Name="PART_DisabledVisual"
+                                   Visibility="Collapsed" />
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="PART_DisabledVisual"
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         To="1"
+                                                         Duration="0" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </hc:SimplePanel>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding DisplayMode, RelativeSource={RelativeSource AncestorType=Calendar}}"
+                                     Value="Year">
+                            <Setter TargetName="PART_MonthView"
+                                    Property="Visibility"
+                                    Value="Hidden" />
+                            <Setter TargetName="PART_YearView"
+                                    Property="Visibility"
+                                    Value="Visible" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding DisplayMode, RelativeSource={RelativeSource AncestorType=Calendar}}"
+                                     Value="Decade">
+                            <Setter TargetName="PART_MonthView"
+                                    Property="Visibility"
+                                    Value="Hidden" />
+                            <Setter TargetName="PART_YearView"
+                                    Property="Visibility"
+                                    Value="Visible" />
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="CalendarBaseStyle"
+           TargetType="Calendar">
+        <Setter Property="Foreground"
+                Value="{DynamicResource PrimaryTextBrush}" />
+        <Setter Property="Background"
+                Value="{DynamicResource RegionBrush}" />
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource BorderBrush}" />
+        <Setter Property="Language"
+                Value="{Binding Lang,Source={x:Static tools:ConfigHelper.Instance}}" />
+        <Setter Property="BorderThickness"
+                Value="0" />
+        <Setter Property="Margin"
+                Value="8 0" />
+        <Setter Property="CalendarDayButtonStyle"
+                Value="{StaticResource CalendarDayButtonStyle}" />
+        <Setter Property="CalendarButtonStyle"
+                Value="{StaticResource CalendarButtonStyle}" />
+        <Setter Property="hc:TitleElement.Background"
+                Value="{DynamicResource TitleBrush}" />
+        <Setter Property="hc:TitleElement.Foreground"
+                Value="{DynamicResource TextIconBrush}" />
+        <Setter Property="hc:BorderElement.CornerRadius"
+                Value="{StaticResource DefaultCornerRadius}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Calendar">
-                    <hc:SimplePanel Margin="0,4,0,8" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <!--<hc:SimplePanel Margin="0,4,0,8" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Border CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Effect="{StaticResource EffectShadow2}"/>
                         <CalendarItem x:Name="PART_CalendarItem" Margin="{TemplateBinding BorderThickness}"/>
+                    </hc:SimplePanel>-->
+                    <!-- Flag HandyControl 日历添加快捷选择日期 -->
+                    <hc:SimplePanel Margin="0,4,0,8"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}"
+                                Effect="{StaticResource EffectShadow2}" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Grid Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(hc:CalendarElement.ShowShortcutButton), Converter={StaticResource Boolean2VisibilityConverter}}">
+                                <hc:ScrollViewer Height="240"
+                                                 VerticalAlignment="Center"
+                                                 VerticalScrollBarVisibility="Auto">
+
+                                    <hc:SimpleStackPanel Margin="5,0"
+                                                         Orientation="Vertical">
+                                        <hc:SimpleStackPanel.Resources>
+                                            <Style BasedOn="{StaticResource ButtonBaseStyle}"
+                                                   TargetType="Button">
+                                                <Setter Property="Foreground"
+                                                        Value="{StaticResource PrimaryTextBrush}" />
+                                                <Setter Property="Background"
+                                                        Value="Transparent" />
+                                                <Setter Property="Cursor"
+                                                        Value="Hand" />
+                                                <Setter Property="BorderThickness"
+                                                        Value="0" />
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver"
+                                                             Value="True">
+                                                        <Setter Property="Foreground"
+                                                                Value="{StaticResource PrimaryBrush}" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </hc:SimpleStackPanel.Resources>
+                                        <!-- 今天 -->
+                                        <Button Command="interactivity:ControlCommands.Today"
+                                                Content="{x:Static langs:Lang.Today}" />
+                                        <!-- 昨天 -->
+                                        <Button Command="interactivity:ControlCommands.Yesterday"
+                                                Content="{x:Static langs:Lang.Yesterday}" />
+                                        <!-- 明天 -->
+                                        <Button Command="interactivity:ControlCommands.Tomorrow"
+                                                Content="{x:Static langs:Lang.Tomorrow}" />
+                                        <!-- 本周 -->
+                                        <Button Command="interactivity:ControlCommands.ThisWeek"
+                                                Content="{x:Static langs:Lang.ThisWeek}" />
+                                        <!-- 上周 -->
+                                        <Button Command="interactivity:ControlCommands.PrevWeek"
+                                                Content="{x:Static langs:Lang.LastWeek}" />
+                                        <!-- 下周 -->
+                                        <Button Command="interactivity:ControlCommands.NextWeek"
+                                                Content="{x:Static langs:Lang.NextWeek}" />
+                                        <!-- 周首日 -->
+                                        <Button Command="interactivity:ControlCommands.FirstDayOfWeek"
+                                                Content="{x:Static langs:Lang.Monday}" />
+                                        <!-- 周末日 -->
+                                        <Button Command="interactivity:ControlCommands.LastDayOfWeek"
+                                                Content="{x:Static langs:Lang.Sunday}" />
+                                        <!-- 本月 -->
+                                        <Button Command="interactivity:ControlCommands.ThisMonth"
+                                                Content="{x:Static langs:Lang.ThisMonth}" />
+                                        <!-- 上月 -->
+                                        <Button Command="interactivity:ControlCommands.PrevMonth"
+                                                Content="{x:Static langs:Lang.LastMonth}" />
+                                        <!-- 下月 -->
+                                        <Button Command="interactivity:ControlCommands.NextMonth"
+                                                Content="{x:Static langs:Lang.NextMonth}" />
+                                        <!-- 月初 -->
+                                        <Button Command="interactivity:ControlCommands.FirstDayOfMonth"
+                                                Content="{x:Static langs:Lang.MonthBegin}" />
+                                        <!-- 月末 -->
+                                        <Button Command="interactivity:ControlCommands.LastDayOfMonth"
+                                                Content="{x:Static langs:Lang.MonthEnd}" />
+                                        <!-- 今年 -->
+                                        <Button Command="interactivity:ControlCommands.ThisYear"
+                                                Content="{x:Static langs:Lang.ThisYear}" />
+                                        <!-- 去年 -->
+                                        <Button Command="interactivity:ControlCommands.PrevYear"
+                                                Content="{x:Static langs:Lang.LastYear}" />
+                                        <!-- 明年 -->
+                                        <Button Command="interactivity:ControlCommands.NextYear"
+                                                Content="{x:Static langs:Lang.NextYear}" />
+                                        <!-- 年初 -->
+                                        <Button Command="interactivity:ControlCommands.FirstDayOfYear"
+                                                Content="{x:Static langs:Lang.YearBegin}" />
+                                        <!-- 年末 -->
+                                        <Button Command="interactivity:ControlCommands.LastDayOfYear"
+                                                Content="{x:Static langs:Lang.YearEnd}" />
+                                    </hc:SimpleStackPanel>
+                                </hc:ScrollViewer>
+                            </Grid>
+                            <hc:Divider x:Name="PART_Divider"
+                                        Grid.Column="1"
+                                        Margin="-7,48"
+                                        LineStroke="{StaticResource DarkOpacityBrush}"
+                                        LineStrokeThickness="2"
+                                        Orientation="Vertical"
+                                        Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(hc:CalendarElement.ShowShortcutButton), Converter={StaticResource Boolean2VisibilityConverter}}" />
+                            <Border Grid.ColumnSpan="3"
+                                    Height="42"
+                                    Margin="4"
+                                    VerticalAlignment="Top"
+                                    Background="{Binding Path=(hc:TitleElement.Background), RelativeSource={RelativeSource TemplatedParent}}"
+                                    CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius), RelativeSource={RelativeSource TemplatedParent}}" />
+                            <CalendarItem x:Name="PART_CalendarItem"
+                                          Grid.Column="2"
+                                          Margin="{TemplateBinding BorderThickness}"
+                                          Style="{StaticResource HandyControlCalendarItemBaseStyle}" />
+                        </Grid>
                     </hc:SimplePanel>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style TargetType="Calendar" BasedOn="{StaticResource CalendarBaseStyle}"/>
+    <Style TargetType="Calendar"
+           BasedOn="{StaticResource CalendarBaseStyle}" />
 
 </ResourceDictionary>

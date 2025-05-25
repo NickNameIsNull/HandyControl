@@ -19,11 +19,33 @@
                             <RotateTransform Angle="-90" />
                         </TransformGroup>
                     </Grid.LayoutTransform>
-                    <ContentPresenter ContentSource="Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    <ContentPresenter ContentSource="Header"
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                        <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                        <ContentPresenter.Resources>
+                            <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                   TargetType="TextBlock">
+                                <Setter Property="Foreground"
+                                        Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                            </Style>
+                        </ContentPresenter.Resources>
+                    </ContentPresenter>
                     <Path Name="PathArrow" IsHitTestVisible="False" Grid.Column="1" Stretch="Uniform" Fill="{TemplateBinding Foreground}" Data="{StaticResource UpGeometry}" Width="12" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="Center" />
                 </Grid>
             </ToggleButton>
-            <ContentPresenter Name="ExpandSite" Visibility="Collapsed" Grid.Column="0" />
+            <ContentPresenter Name="ExpandSite"
+                              Visibility="Collapsed"
+                              Grid.Column="0">
+                <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                <ContentPresenter.Resources>
+                    <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                           TargetType="TextBlock">
+                        <Setter Property="Foreground"
+                                Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                    </Style>
+                </ContentPresenter.Resources>
+            </ContentPresenter>
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="IsExpanded" Value="true">
@@ -49,11 +71,33 @@
                         <ColumnDefinition />
                         <ColumnDefinition Width="30" />
                     </Grid.ColumnDefinitions>
-                    <ContentPresenter ContentSource="Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    <ContentPresenter ContentSource="Header"
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                        <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                        <ContentPresenter.Resources>
+                            <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                   TargetType="TextBlock">
+                                <Setter Property="Foreground"
+                                        Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                            </Style>
+                        </ContentPresenter.Resources>
+                    </ContentPresenter>
                     <Path Name="PathArrow" IsHitTestVisible="False" Grid.Column="1" Stretch="Uniform" Fill="{TemplateBinding Foreground}" Data="{StaticResource UpGeometry}" Width="12" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="Center" />
                 </Grid>
             </ToggleButton>
-            <ContentPresenter Name="ExpandSite" Visibility="Collapsed" Grid.Row="0" />
+            <ContentPresenter Name="ExpandSite"
+                              Visibility="Collapsed"
+                              Grid.Row="0">
+                <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                <ContentPresenter.Resources>
+                    <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                           TargetType="TextBlock">
+                        <Setter Property="Foreground"
+                                Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                    </Style>
+                </ContentPresenter.Resources>
+            </ContentPresenter>
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="IsExpanded" Value="true">
@@ -84,11 +128,33 @@
                             <RotateTransform Angle="-90" />
                         </TransformGroup>
                     </Grid.LayoutTransform>
-                    <ContentPresenter ContentSource="Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    <ContentPresenter ContentSource="Header"
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                        <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                        <ContentPresenter.Resources>
+                            <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                   TargetType="TextBlock">
+                                <Setter Property="Foreground"
+                                        Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                            </Style>
+                        </ContentPresenter.Resources>
+                    </ContentPresenter>
                     <Path Name="PathArrow" IsHitTestVisible="False" Grid.Column="1" Stretch="Uniform" Fill="{TemplateBinding Foreground}" Data="{StaticResource DownGeometry}" Width="12" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="Center" />
                 </Grid>
             </ToggleButton>
-            <ContentPresenter Name="ExpandSite" Visibility="Collapsed" Grid.Column="1" />
+            <ContentPresenter Name="ExpandSite"
+                              Visibility="Collapsed"
+                              Grid.Column="1">
+                <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                <ContentPresenter.Resources>
+                    <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                           TargetType="TextBlock">
+                        <Setter Property="Foreground"
+                                Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                    </Style>
+                </ContentPresenter.Resources>
+            </ContentPresenter>
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="IsExpanded" Value="true">
@@ -114,11 +180,33 @@
                         <ColumnDefinition />
                         <ColumnDefinition Width="30" />
                     </Grid.ColumnDefinitions>
-                    <ContentPresenter ContentSource="Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    <ContentPresenter ContentSource="Header"
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                        <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                        <ContentPresenter.Resources>
+                            <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                   TargetType="TextBlock">
+                                <Setter Property="Foreground"
+                                        Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                            </Style>
+                        </ContentPresenter.Resources>
+                    </ContentPresenter>
                     <Path Name="PathArrow" IsHitTestVisible="False" Grid.Column="1" Stretch="Uniform" Fill="{TemplateBinding Foreground}" Data="{StaticResource DownGeometry}" Width="12" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="Center" />
                 </Grid>
             </ToggleButton>
-            <ContentPresenter Name="ExpandSite" Visibility="Collapsed" Grid.Row="1" />
+            <ContentPresenter Name="ExpandSite"
+                              Visibility="Collapsed"
+                              Grid.Row="1">
+                <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                <ContentPresenter.Resources>
+                    <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                           TargetType="TextBlock">
+                        <Setter Property="Foreground"
+                                Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                    </Style>
+                </ContentPresenter.Resources>
+            </ContentPresenter>
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="IsExpanded" Value="true">

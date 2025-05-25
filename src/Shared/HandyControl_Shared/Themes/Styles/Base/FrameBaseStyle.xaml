@@ -27,7 +27,18 @@
                         <Button Padding="6" hc:IconElement.Geometry="{StaticResource RotateRightGeometry}" Command="NavigationCommands.Refresh"/>
                     </hc:ButtonGroup>
                 </Border>
-                <ContentPresenter SnapsToDevicePixels="True" x:Name="PART_NavWinCP" ClipToBounds="true"/>
+                <ContentPresenter SnapsToDevicePixels="True"
+                                  x:Name="PART_NavWinCP"
+                                  ClipToBounds="true">
+                    <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                    <ContentPresenter.Resources>
+                        <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                               TargetType="TextBlock">
+                            <Setter Property="Foreground"
+                                    Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                        </Style>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
             </DockPanel>
         </Border>
     </ControlTemplate>
@@ -40,7 +51,17 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Frame">
                     <Border CornerRadius="{Binding Path=(hc:BorderElement.CornerRadius),RelativeSource={RelativeSource TemplatedParent}}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
-                        <ContentPresenter SnapsToDevicePixels="True" x:Name="PART_FrameCP"/>
+                        <ContentPresenter SnapsToDevicePixels="True"
+                                          x:Name="PART_FrameCP">
+                            <!-- Flag Syncfusion HandyControl StyleCodeConflict -->
+                            <ContentPresenter.Resources>
+                                <Style BasedOn="{StaticResource TextBlockBaseStyle}"
+                                       TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{Binding (TextElement.Foreground), RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
