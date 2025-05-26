@@ -15637,7 +15637,7 @@
 									</Grid.ColumnDefinitions>
 									<Border Grid.Column="0" Width="{Binding ElementName=PART_ListClockToggleButton, Path=ActualWidth}" />
 									<TextBlock x:Name="PART_TimeStr" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Foreground="{DynamicResource TextIconBrush}" />
-									<ToggleButton x:Name="PART_ListClockToggleButton" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" hc:IconSwitchElement.Geometry="{StaticResource DownGeometry}" hc:IconSwitchElement.GeometrySelected="{StaticResource UpGeometry}" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" hc:IconElement.Height="24" hc:IconElement.Width="24" Padding="4" Foreground="{StaticResource TextIconBrush}" Style="{StaticResource ToggleButtonIcon}" />
+									<ToggleButton x:Name="PART_ListClockToggleButton" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" hc:IconSwitchElement.Geometry="{StaticResource DownGeometry}" hc:IconSwitchElement.GeometrySelected="{StaticResource UpGeometry}" Background="Transparent" BorderBrush="Transparent" Cursor="Hand" Foreground="{StaticResource TextIconBrush}" Style="{StaticResource ToggleButtonIcon}" />
 								</Grid>
 							</Border>
 							<Popup x:Name="PART_ListClockPopup" AllowsTransparency="True" HorizontalOffset="-4" IsOpen="{Binding ElementName=PART_ListClockToggleButton, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Path=IsChecked}" PlacementTarget="{Binding ElementName=PART_BorderTitle}" StaysOpen="False">
