@@ -40,6 +40,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Carousel\CarouselItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Dialog\DialogContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Drawer\DrawerContainer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Growl\GrowlStrong.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Controls\Growl\GrowlStrongWindow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Growl\GrowlWindow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Image\ImageBlock.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Input\AutoCompleteTextBox\AutoCompleteTextBox.cs" />
@@ -99,9 +101,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Tag\TagContainer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Text\HighlightTextBlock.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Controls\Text\SimpleText.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Enum\GrowlShowPosition.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Enum\GrowlShowMode.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Enum\LinearLayout.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Data\Enum\RunningDirection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\Info\GrowlStrongInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Tools\Helper\DateTimeHelper.cs" />
     <Compile Include="..\..\Shared\HandyControl_Shared\Input\SimpleMouseBinding.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interactivity\EventToCommand.cs" />
@@ -400,6 +404,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="$(MSBuildThisFileDirectory)Themes\Styles\ElementGroup.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Themes\Styles\GrowlStrong.xaml">
       <SubType>Designer</SubType>
     </None>
     <None Include="$(MSBuildThisFileDirectory)Themes\Styles\Ribbon.xaml">
@@ -935,7 +942,6 @@
     <None Include="$(MSBuildThisFileDirectory)Resources\Effects\GrayScaleEffect.fx" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="$(MSBuildThisFileDirectory)Data\Info\" />
     <Folder Include="$(MSBuildThisFileDirectory)Tools\Interop\Handle\" />
   </ItemGroup>
   <ItemGroup>

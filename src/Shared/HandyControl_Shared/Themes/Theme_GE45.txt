@@ -151,6 +151,7 @@ Styles\GotoTop.xaml
 Styles\Gravatar.xaml
 Styles\GridSplitter.xaml
 Styles\Growl.xaml
+Styles\GrowlStrong.xaml
 Styles\ImageSelector.xaml
 Styles\ImageViewer.xaml
 Styles\ListBox.xaml
