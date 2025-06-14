@@ -12,7 +12,7 @@ namespace HandyControl.Controls;
 /// </summary>
 public sealed class GrowlStrongWindow : Window
 {
-    internal List<Panel> GrowlPanel { get; set; }
+    internal List<Panel> GrowlPanel { get; set; } = new();
 
     private readonly Grid _windowContent = new Grid();
     internal GrowlStrongWindow(GrowlShowPosition showPosition = GrowlShowPosition.Default)
@@ -25,8 +25,9 @@ public sealed class GrowlStrongWindow : Window
         {
             VerticalScrollBarVisibility = ScrollBarVisibility.Hidden,
             IsInertiaEnabled = true,
-            Content = GrowlPanel
+            Content = _windowContent
         };
+        this.Topmost = true;
     }
 
     /// <summary>
@@ -103,6 +104,32 @@ public sealed class GrowlStrongWindow : Window
         Height = desktopWorkingArea.Height;
         Left = desktopWorkingArea.Right - Width;
         Top = 0;
+
+        //Todo 调整在多屏下显示的位置
+        //if (Application.Current?.MainWindow != null)
+        //{
+        //    var ownerWindow = Application.Current?.MainWindow;
+        //    //获取当前活动窗体
+        //    var activeWindow = WindowHelper.GetActiveWindow();
+        //    if (activeWindow != null && activeWindow.GetType() != typeof(GrowlStrongWindow))
+        //    {
+        //        ownerWindow = activeWindow;
+        //    }
+        //    this.Owner = ownerWindow;
+        //    this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+        //    var window = this.Owner;
+        //    if (window != null)
+        //    {
+        //        this.Width = window.ActualWidth;
+        //        this.Height = window.ActualHeight;
+        //        this.MaxWidth = window.ActualWidth;
+        //        this.Left = window.Left;
+        //        this.Top= window.Top;
+        //    }
+
+        //    this.SizeToContent = SizeToContent.Manual;
+        //    this.Topmost = true;
+        //}
     }
 
     protected override void OnSourceInitialized(EventArgs e)

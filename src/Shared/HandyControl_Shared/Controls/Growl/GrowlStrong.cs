@@ -21,25 +21,45 @@ namespace HandyControl.Controls;
 [TemplatePart(Name = ElementPanelMore, Type = typeof(Panel))]
 [TemplatePart(Name = ElementGridMain, Type = typeof(Grid))]
 [TemplatePart(Name = ElementButtonClose, Type = typeof(Button))]
-public class GrowlStrong : Growl
+public class GrowlStrong : Control
 {
     private const string ElementPanelMore = "PART_PanelMore";
     private const string ElementGridMain = "PART_GridMain";
     private const string ElementButtonClose = "PART_ButtonClose";
     private const int MinWaitTime = 2;
 
-    public new static readonly DependencyProperty GrowlParentProperty = DependencyProperty.RegisterAttached(
-        "GrowlParent", typeof(bool), typeof(Growl), new PropertyMetadata(ValueBoxes.FalseBox, (o, args) =>
+    public static readonly DependencyProperty GrowlParentProperty = DependencyProperty.RegisterAttached(
+        "GrowlParent", typeof(bool), typeof(GrowlStrong), new PropertyMetadata(ValueBoxes.FalseBox, (o, args) =>
         {
             if ((bool) args.NewValue && o is Panel panel)
             {
                 SetGrowlPanel(panel);
             }
         }));
+    public static readonly DependencyProperty ShowModeProperty = DependencyProperty.RegisterAttached(
+        "ShowMode", typeof(GrowlShowMode), typeof(GrowlStrong),
+        new FrameworkPropertyMetadata(default(GrowlShowMode), FrameworkPropertyMetadataOptions.Inherits));
+    public static readonly DependencyProperty ShowDateTimeProperty = DependencyProperty.Register(
+        nameof(ShowDateTime), typeof(bool), typeof(GrowlStrong), new PropertyMetadata(ValueBoxes.TrueBox));
+    public static readonly DependencyProperty MessageProperty = DependencyProperty.Register(
+        nameof(Message), typeof(string), typeof(GrowlStrong), new PropertyMetadata(default(string)));
+    public static readonly DependencyProperty TimeProperty = DependencyProperty.Register(
+        nameof(Time), typeof(DateTime), typeof(GrowlStrong), new PropertyMetadata(default(DateTime)));
+    public static readonly DependencyProperty IconProperty = DependencyProperty.Register(
+        nameof(Icon), typeof(Geometry), typeof(GrowlStrong), new PropertyMetadata(default(Geometry)));
+    public static readonly DependencyProperty IconBrushProperty = DependencyProperty.Register(
+        nameof(IconBrush), typeof(Brush), typeof(GrowlStrong), new PropertyMetadata(default(Brush)));
+    public static readonly DependencyProperty TypeProperty = DependencyProperty.Register(
+        nameof(Type), typeof(InfoType), typeof(GrowlStrong), new PropertyMetadata(default(InfoType)));
+    public static readonly DependencyProperty TokenProperty = DependencyProperty.RegisterAttached(
+        "Token", typeof(string), typeof(GrowlStrong), new PropertyMetadata(default(string), OnTokenChanged));
+    internal static readonly DependencyProperty CancelStrProperty = DependencyProperty.Register(
+        nameof(CancelStr), typeof(string), typeof(GrowlStrong), new PropertyMetadata(default(string)));
+    internal static readonly DependencyProperty ConfirmStrProperty = DependencyProperty.Register(
+        nameof(ConfirmStr), typeof(string), typeof(GrowlStrong), new PropertyMetadata(default(string)));
     private static readonly DependencyProperty IsCreatedAutomaticallyProperty = DependencyProperty.RegisterAttached(
-        "IsCreatedAutomatically", typeof(bool), typeof(Growl), new PropertyMetadata(ValueBoxes.FalseBox));
+        "IsCreatedAutomatically", typeof(bool), typeof(GrowlStrong), new PropertyMetadata(ValueBoxes.FalseBox));
     private static GrowlStrongWindow GrowlStrongWindow;
-    // ReSharper disable once CollectionNeverUpdated.Local
     private static readonly Dictionary<string, Panel> PanelDic = new();
 
     private Panel _panelMore;
@@ -62,9 +82,111 @@ public class GrowlStrong : Growl
     /// <summary>
     ///     消息容器
     /// </summary>
-    public new static List<Panel> GrowlPanel { get; set; } = new();
+    public static List<Panel> GrowlPanel { get; set; } = new();
 
-    private Func<bool, bool> ActionBeforeClose { get; init; }
+    public InfoType Type
+    {
+        get => (InfoType) GetValue(TypeProperty);
+        set => SetValue(TypeProperty, value);
+    }
+
+    public bool ShowDateTime
+    {
+        get => (bool) GetValue(ShowDateTimeProperty);
+        set => SetValue(ShowDateTimeProperty, ValueBoxes.BooleanBox(value));
+    }
+
+    public string Message
+    {
+        get => (string) GetValue(MessageProperty);
+        set => SetValue(MessageProperty, value);
+    }
+
+    public DateTime Time
+    {
+        get => (DateTime) GetValue(TimeProperty);
+        set => SetValue(TimeProperty, value);
+    }
+
+    public Geometry Icon
+    {
+        get => (Geometry) GetValue(IconProperty);
+        set => SetValue(IconProperty, value);
+    }
+
+    public Brush IconBrush
+    {
+        get => (Brush) GetValue(IconBrushProperty);
+        set => SetValue(IconBrushProperty, value);
+    }
+
+    internal string CancelStr
+    {
+        get => (string) GetValue(CancelStrProperty);
+        set => SetValue(CancelStrProperty, value);
+    }
+
+    internal string ConfirmStr
+    {
+        get => (string) GetValue(ConfirmStrProperty);
+        set => SetValue(ConfirmStrProperty, value);
+    }
+
+    private Func<bool, bool> ActionBeforeClose { get; set; }
+
+
+    public GrowlStrong()
+    {
+        CommandBindings.Add(new CommandBinding(ControlCommands.Close, ButtonClose_OnClick));
+        CommandBindings.Add(new CommandBinding(ControlCommands.Cancel, ButtonCancel_OnClick));
+        CommandBindings.Add(new CommandBinding(ControlCommands.Confirm, ButtonOk_OnClick));
+    }
+    public static void Register(string token, Panel panel)
+    {
+        if (string.IsNullOrEmpty(token) || panel == null) return;
+        PanelDic[token] = panel;
+        InitGrowlPanel(panel);
+    }
+
+    public static void Unregister(string token, Panel panel)
+    {
+        if (string.IsNullOrEmpty(token) || panel == null) return;
+
+        if (PanelDic.ContainsKey(token))
+        {
+            if (ReferenceEquals(PanelDic[token], panel))
+            {
+                PanelDic.Remove(token);
+                panel.ContextMenu = null;
+                panel.SetCurrentValue(PanelElement.FluidMoveBehaviorProperty, DependencyProperty.UnsetValue);
+            }
+        }
+    }
+
+    public static void Unregister(Panel panel)
+    {
+        if (panel == null) return;
+        var first = PanelDic.FirstOrDefault(item => ReferenceEquals(panel, item.Value));
+        if (!string.IsNullOrEmpty(first.Key))
+        {
+            PanelDic.Remove(first.Key);
+            panel.ContextMenu = null;
+            panel.SetCurrentValue(PanelElement.FluidMoveBehaviorProperty, DependencyProperty.UnsetValue);
+        }
+    }
+
+    public static void Unregister(string token)
+    {
+        if (string.IsNullOrEmpty(token)) return;
+
+        if (PanelDic.ContainsKey(token))
+        {
+            var panel = PanelDic[token];
+            PanelDic.Remove(token);
+            panel.ContextMenu = null;
+            panel.SetCurrentValue(PanelElement.FluidMoveBehaviorProperty, DependencyProperty.UnsetValue);
+        }
+    }
 
 
     protected override void OnMouseEnter(MouseEventArgs e)
@@ -84,7 +206,6 @@ public class GrowlStrong : Growl
     public override void OnApplyTemplate()
     {
         base.OnApplyTemplate();
-
         _panelMore = GetTemplateChild(ElementPanelMore) as Panel;
         _gridMain = GetTemplateChild(ElementGridMain) as Grid;
         _buttonClose = GetTemplateChild(ElementButtonClose) as Button;
@@ -113,7 +234,6 @@ public class GrowlStrong : Growl
         }
     }
 
-
     #region 显示遮罩 - 依赖属性
     /// <summary>
     /// 显示遮罩 - 定义依赖属性 - 属性
@@ -129,7 +249,7 @@ public class GrowlStrong : Growl
     /// <para>使用DependencyProperty作为MyProperty的后台存储。这支持动画、样式、绑定等。</para>
     /// </summary>
     public static readonly DependencyProperty ShowMaskProperty =
-        DependencyProperty.Register(nameof(ShowMask), typeof(bool), typeof(Growl), new PropertyMetadata(false, OnShowMaskPropertyChanged));
+        DependencyProperty.Register(nameof(ShowMask), typeof(bool), typeof(GrowlStrong), new PropertyMetadata(false, OnShowMaskPropertyChanged));
 
     /// <summary>
     /// 当属性 显示遮罩 出现变更时
@@ -141,6 +261,18 @@ public class GrowlStrong : Growl
 
     }
     #endregion 显示遮罩 - 依赖属性 
+
+    public static void SetToken(DependencyObject element, string value) => element.SetValue(TokenProperty, value);
+
+    public static string GetToken(DependencyObject element) => (string) element.GetValue(TokenProperty);
+
+    public static void SetShowMode(DependencyObject element, GrowlShowMode value) => element.SetValue(ShowModeProperty, value);
+
+    public static GrowlShowMode GetShowMode(DependencyObject element) => (GrowlShowMode) element.GetValue(ShowModeProperty);
+
+    public static void SetGrowlParent(DependencyObject element, bool value) => element.SetValue(GrowlParentProperty, ValueBoxes.BooleanBox(value));
+
+    public static bool GetGrowlParent(DependencyObject element) => (bool) element.GetValue(GrowlParentProperty);
 
     private static void SetIsCreatedAutomatically(DependencyObject element, bool value) => element.SetValue(IsCreatedAutomaticallyProperty, ValueBoxes.BooleanBox(value));
 
@@ -267,13 +399,26 @@ public class GrowlStrong : Growl
                 {
                     if (GrowlStrongWindow == null)
                     {
-                        GrowlStrongWindow = new GrowlStrongWindow();
+                        GrowlStrongWindow = new GrowlStrongWindow(growlInfo.ShowPosition);
                         GrowlStrongWindow.Show();
                         InitGrowlPanel(GrowlStrongWindow.GrowlPanel.FirstOrDefault());
                         GrowlStrongWindow.Init();
                     }
 
                     GrowlStrongWindow.Show(true);
+
+                    //growlInfo.GrowlMaxWidth = GrowlStrongWindow.ActualWidth;
+                    //if (growlInfo.GrowlMaxWidth > GrowlStrongWindow.ActualWidth - 100)
+                    //{
+                    //    if (GrowlStrongWindow.ActualWidth > 100)
+                    //    {
+                    //        growlInfo.GrowlMaxWidth = GrowlStrongWindow.ActualWidth - 100;
+                    //    }
+                    //    else
+                    //    {
+                    //        growlInfo.GrowlMaxWidth = GrowlStrongWindow.ActualWidth;
+                    //    }
+                    //}
 
                     var ctl = new GrowlStrong
                     {
@@ -516,7 +661,7 @@ public class GrowlStrong : Growl
     /// </summary>
     /// <param name="message"></param>
     /// <param name="token"></param>
-    public new static void Success(string message, string token = "") => Success(new GrowlStrongInfo
+    public static void Success(string message, string token = "") => Success(new GrowlStrongInfo
     {
         Message = message,
         Token = token
@@ -536,7 +681,7 @@ public class GrowlStrong : Growl
     ///     成功
     /// </summary>
     /// <param name="message"></param>
-    public new static void SuccessGlobal(string message) => SuccessGlobal(new GrowlStrongInfo
+    public static void SuccessGlobal(string message) => SuccessGlobal(new GrowlStrongInfo
     {
         Message = message
     });
@@ -556,7 +701,7 @@ public class GrowlStrong : Growl
     /// </summary>
     /// <param name="message"></param>
     /// <param name="token"></param>
-    public new static void Info(string message, string token = "") => Info(new GrowlStrongInfo
+    public static void Info(string message, string token = "") => Info(new GrowlStrongInfo
     {
         Message = message,
         Token = token
@@ -576,7 +721,7 @@ public class GrowlStrong : Growl
     ///     消息
     /// </summary>
     /// <param name="message"></param>
-    public new static void InfoGlobal(string message) => InfoGlobal(new GrowlStrongInfo
+    public static void InfoGlobal(string message) => InfoGlobal(new GrowlStrongInfo
     {
         Message = message
     });
@@ -596,7 +741,7 @@ public class GrowlStrong : Growl
     /// </summary>
     /// <param name="message"></param>
     /// <param name="token"></param>
-    public new static void Warning(string message, string token = "") => Warning(new GrowlStrongInfo
+    public static void Warning(string message, string token = "") => Warning(new GrowlStrongInfo
     {
         Message = message,
         Token = token
@@ -616,7 +761,7 @@ public class GrowlStrong : Growl
     ///     警告
     /// </summary>
     /// <param name="message"></param>
-    public new static void WarningGlobal(string message) => WarningGlobal(new GrowlStrongInfo
+    private static void WarningGlobal(string message) => WarningGlobal(new GrowlStrongInfo
     {
         Message = message
     });
@@ -636,7 +781,7 @@ public class GrowlStrong : Growl
     /// </summary>
     /// <param name="message"></param>
     /// <param name="token"></param>
-    public new static void Error(string message, string token = "") => Error(new GrowlStrongInfo
+    public static void Error(string message, string token = "") => Error(new GrowlStrongInfo
     {
         Message = message,
         Token = token
@@ -656,7 +801,7 @@ public class GrowlStrong : Growl
     ///     错误
     /// </summary>
     /// <param name="message"></param>
-    public new static void ErrorGlobal(string message) => ErrorGlobal(new GrowlStrongInfo
+    public static void ErrorGlobal(string message) => ErrorGlobal(new GrowlStrongInfo
     {
         Message = message
     });
@@ -676,7 +821,7 @@ public class GrowlStrong : Growl
     /// </summary>
     /// <param name="message"></param>
     /// <param name="token"></param>
-    public new static void Fatal(string message, string token = "") => Fatal(new GrowlStrongInfo
+    public static void Fatal(string message, string token = "") => Fatal(new GrowlStrongInfo
     {
         Message = message,
         Token = token
@@ -696,7 +841,7 @@ public class GrowlStrong : Growl
     ///     严重
     /// </summary>
     /// <param name="message"></param>
-    public new static void FatalGlobal(string message) => FatalGlobal(new GrowlStrongInfo
+    public static void FatalGlobal(string message) => FatalGlobal(new GrowlStrongInfo
     {
         Message = message
     });
@@ -717,7 +862,7 @@ public class GrowlStrong : Growl
     /// <param name="message"></param>
     /// <param name="actionBeforeClose"></param>
     /// <param name="token"></param>
-    public new static void Ask(string message, Func<bool, bool> actionBeforeClose, string token = "") => Ask(new GrowlStrongInfo
+    public static void Ask(string message, Func<bool, bool> actionBeforeClose, string token = "") => Ask(new GrowlStrongInfo
     {
         Message = message,
         ActionBeforeClose = actionBeforeClose,
@@ -739,7 +884,7 @@ public class GrowlStrong : Growl
     /// </summary>
     /// <param name="message"></param>
     /// <param name="actionBeforeClose"></param>
-    public new static void AskGlobal(string message, Func<bool, bool> actionBeforeClose) => AskGlobal(new GrowlStrongInfo
+    public static void AskGlobal(string message, Func<bool, bool> actionBeforeClose) => AskGlobal(new GrowlStrongInfo
     {
         Message = message,
         ActionBeforeClose = actionBeforeClose
@@ -759,21 +904,1766 @@ public class GrowlStrong : Growl
 
     #region 弹出位置的扩展方法
 
+
+    #region 成功
     /// <summary>
-    ///     成功
+    ///     成功 左上
     /// </summary>
-    /// <param name="message"></param>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
     /// <param name="isShowMask">是否显示遮罩</param>
     /// <param name="token"></param>
-    public static void SuccessToLeftTop(string message,bool isShowMask = false, string token = "") => Success(new GrowlStrongInfo
+    public static void SuccessToLeftTop(string message, string topic = null, bool isShowMask = false, string token = "") => Success(new GrowlStrongInfo
     {
-        Message = message,
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
         Token = token,
         ShowMask = isShowMask,
         ShowPosition = GrowlShowPosition.LeftTop
     });
 
-    // TODO 其他方向需要进行扩展
+    /// <summary>
+    ///     成功 左中
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void SuccessToLeftCenter(string message, string topic = null, bool isShowMask = false, string token = "") => Success(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.LeftCenter
+    });
+
+    /// <summary>
+    ///     成功 左下
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void SuccessToLeftBottom(string message, string topic = null, bool isShowMask = false, string token = "") => Success(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.LeftBottom
+    });
+
+    /// <summary>
+    ///     成功 居中上方
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void SuccessToCenterTop(string message, string topic = null, bool isShowMask = false, string token = "") => Success(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.CenterTop
+    });
+
+    /// <summary>
+    ///     成功 居中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void SuccessToCenter(string message, string topic = null, bool isShowMask = false, string token = "") => Success(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.Center
+    });
+
+    /// <summary>
+    ///     成功 居中下方
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void SuccessToCenterBottom(string message, string topic = null, bool isShowMask = false, string token = "") => Success(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.CenterBottom
+    });
+
+    /// <summary>
+    ///     成功 右上
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void SuccessToRightTop(string message, string topic = null, bool isShowMask = false, string token = "") => Success(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.RightTop
+    });
+
+    /// <summary>
+    ///     成功 右中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void SuccessToRightCenter(string message, string topic = null, bool isShowMask = false, string token = "") => Success(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.RightCenter
+    });
+
+    /// <summary>
+    ///     成功 右下
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void SuccessToRightBottom(string message, string topic = null, bool isShowMask = false, string token = "") => Success(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.RightBottom
+    });
+
+    /// <summary>
+    ///     成功 左上
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    public static void SuccessGlobalToLeftTop(string message, string topic = null) => SuccessGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.LeftTop
+    });
+
+    /// <summary>
+    ///     成功 左中
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    public static void SuccessGlobalToLeftCenter(string message, string topic = null) => SuccessGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.LeftCenter
+    });
+
+    /// <summary>
+    ///     成功 左下
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    public static void SuccessGlobalToLeftBottom(string message, string topic = null) => SuccessGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.LeftBottom
+    });
+
+    /// <summary>
+    ///     成功 居中上方
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    public static void SuccessGlobalToCenterTop(string message, string topic = null) => SuccessGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.CenterTop
+    });
+
+    /// <summary>
+    ///     成功 居中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void SuccessGlobalToCenter(string message, string topic = null) => SuccessGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.Center
+    });
+
+    /// <summary>
+    ///     成功 居中下方
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void SuccessGlobalToCenterBottom(string message, string topic = null) => SuccessGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.CenterBottom
+    });
+
+    /// <summary>
+    ///     成功 右上
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void SuccessGlobalToRightTop(string message, string topic = null) => SuccessGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.RightTop
+    });
+
+    /// <summary>
+    ///     成功 右中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void SuccessGlobalToRightCenter(string message, string topic = null) => SuccessGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.RightCenter
+    });
+
+    /// <summary>
+    ///     成功 右下
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void SuccessGlobalToRightBottom(string message, string topic = null) => SuccessGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.RightBottom
+    });
+
+    #endregion 成功
+
+    #region 消息
+    /// <summary>
+    ///     消息 左上
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void InfoToLeftTop(string message, string topic = null, bool isShowMask = false, string token = "") => Info(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.LeftTop
+    });
+
+    /// <summary>
+    ///     消息 左中
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void InfoToLeftCenter(string message, string topic = null, bool isShowMask = false, string token = "") => Info(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.LeftCenter
+    });
+
+    /// <summary>
+    ///     消息 左下
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void InfoToLeftBottom(string message, string topic = null, bool isShowMask = false, string token = "") => Info(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.LeftBottom
+    });
+
+    /// <summary>
+    ///     消息 居中上方
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void InfoToCenterTop(string message, string topic = null, bool isShowMask = false, string token = "") => Info(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.CenterTop
+    });
+
+    /// <summary>
+    ///     消息 居中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void InfoToCenter(string message, string topic = null, bool isShowMask = false, string token = "") => Info(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.Center
+    });
+
+    /// <summary>
+    ///     消息 居中下方
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void InfoToCenterBottom(string message, string topic = null, bool isShowMask = false, string token = "") => Info(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.CenterBottom
+    });
+
+    /// <summary>
+    ///     消息 右上
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void InfoToRightTop(string message, string topic = null, bool isShowMask = false, string token = "") => Info(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.RightTop
+    });
+
+    /// <summary>
+    ///     消息 右中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void InfoToRightCenter(string message, string topic = null, bool isShowMask = false, string token = "") => Info(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.RightCenter
+    });
+
+    /// <summary>
+    ///     消息 右下
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void InfoToRightBottom(string message, string topic = null, bool isShowMask = false, string token = "") => Info(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.RightBottom
+    });
+
+
+    /// <summary>
+    ///     消息 左上
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    public static void InfoGlobalToLeftTop(string message, string topic = null) => InfoGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.LeftTop
+    });
+
+    /// <summary>
+    ///     消息 左中
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    public static void InfoGlobalToLeftCenter(string message, string topic = null) => InfoGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.LeftCenter
+    });
+
+    /// <summary>
+    ///     消息 左下
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    public static void InfoGlobalToLeftBottom(string message, string topic = null) => InfoGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.LeftBottom
+    });
+
+    /// <summary>
+    ///     消息 居中上方
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    public static void InfoGlobalToCenterTop(string message, string topic = null) => InfoGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.CenterTop
+    });
+
+    /// <summary>
+    ///     消息 居中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void InfoGlobalToCenter(string message, string topic = null) => InfoGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.Center
+    });
+
+    /// <summary>
+    ///     消息 居中下方
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void InfoGlobalToCenterBottom(string message, string topic = null) => InfoGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.CenterBottom
+    });
+
+    /// <summary>
+    ///     消息 右上
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void InfoGlobalToRightTop(string message, string topic = null) => InfoGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.RightTop
+    });
+
+    /// <summary>
+    ///     消息 右中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void InfoGlobalToRightCenter(string message, string topic = null) => InfoGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.RightCenter
+    });
+
+    /// <summary>
+    ///     消息 右下
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void InfoGlobalToRightBottom(string message, string topic = null) => InfoGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.RightBottom
+    });
+    #endregion 消息
+
+    #region 警告
+    /// <summary>
+    ///     警告 左上
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void WarningToLeftTop(string message, string topic = null, bool isShowMask = false, string token = "") => Warning(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.LeftTop
+    });
+
+    /// <summary>
+    ///     警告 左中
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void WarningToLeftCenter(string message, string topic = null, bool isShowMask = false, string token = "") => Warning(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.LeftCenter
+    });
+
+    /// <summary>
+    ///     警告 左下
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void WarningToLeftBottom(string message, string topic = null, bool isShowMask = false, string token = "") => Warning(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.LeftBottom
+    });
+
+    /// <summary>
+    ///     警告 居中上方
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void WarningToCenterTop(string message, string topic = null, bool isShowMask = false, string token = "") => Warning(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.CenterTop
+    });
+
+    /// <summary>
+    ///     警告 居中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void WarningToCenter(string message, string topic = null, bool isShowMask = false, string token = "") => Warning(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.Center
+    });
+
+    /// <summary>
+    ///     警告 居中下方
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void WarningToCenterBottom(string message, string topic = null, bool isShowMask = false, string token = "") => Warning(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.CenterBottom
+    });
+
+    /// <summary>
+    ///     警告 右上
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void WarningToRightTop(string message, string topic = null, bool isShowMask = false, string token = "") => Warning(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.RightTop
+    });
+
+    /// <summary>
+    ///     警告 右中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void WarningToRightCenter(string message, string topic = null, bool isShowMask = false, string token = "") => Warning(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.RightCenter
+    });
+
+    /// <summary>
+    ///     警告 右下
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void WarningToRightBottom(string message, string topic = null, bool isShowMask = false, string token = "") => Warning(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.RightBottom
+    });
+
+
+    /// <summary>
+    ///     警告 左上
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    public static void WarningGlobalToLeftTop(string message, string topic = null) => WarningGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.LeftTop
+    });
+
+    /// <summary>
+    ///     警告 左中
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    public static void WarningGlobalToLeftCenter(string message, string topic = null) => WarningGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.LeftCenter
+    });
+
+    /// <summary>
+    ///     警告 左下
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    public static void WarningGlobalToLeftBottom(string message, string topic = null) => WarningGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.LeftBottom
+    });
+
+    /// <summary>
+    ///     警告 居中上方
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    public static void WarningGlobalToCenterTop(string message, string topic = null) => WarningGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.CenterTop
+    });
+
+    /// <summary>
+    ///     警告 居中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void WarningGlobalToCenter(string message, string topic = null) => WarningGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.Center
+    });
+
+    /// <summary>
+    ///     警告 居中下方
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void WarningGlobalToCenterBottom(string message, string topic = null) => WarningGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.CenterBottom
+    });
+
+    /// <summary>
+    ///     警告 右上
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void WarningGlobalToRightTop(string message, string topic = null) => WarningGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.RightTop
+    });
+
+    /// <summary>
+    ///     警告 右中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void WarningGlobalToRightCenter(string message, string topic = null) => WarningGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.RightCenter
+    });
+
+    /// <summary>
+    ///     警告 右下
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void WarningGlobalToRightBottom(string message, string topic = null) => WarningGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.RightBottom
+    });
+    #endregion 警告
+
+    #region 错误
+    /// <summary>
+    ///     错误 左上
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void ErrorToLeftTop(string message, string topic = null, bool isShowMask = false, string token = "") => Error(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.LeftTop
+    });
+
+    /// <summary>
+    ///     错误 左中
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void ErrorToLeftCenter(string message, string topic = null, bool isShowMask = false, string token = "") => Error(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.LeftCenter
+    });
+
+    /// <summary>
+    ///     错误 左下
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void ErrorToLeftBottom(string message, string topic = null, bool isShowMask = false, string token = "") => Error(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.LeftBottom
+    });
+
+    /// <summary>
+    ///     错误 居中上方
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void ErrorToCenterTop(string message, string topic = null, bool isShowMask = false, string token = "") => Error(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.CenterTop
+    });
+
+    /// <summary>
+    ///     错误 居中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void ErrorToCenter(string message, string topic = null, bool isShowMask = false, string token = "") => Error(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.Center
+    });
+
+    /// <summary>
+    ///     错误 居中下方
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void ErrorToCenterBottom(string message, string topic = null, bool isShowMask = false, string token = "") => Error(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.CenterBottom
+    });
+
+    /// <summary>
+    ///     错误 右上
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void ErrorToRightTop(string message, string topic = null, bool isShowMask = false, string token = "") => Error(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.RightTop
+    });
+
+    /// <summary>
+    ///     错误 右中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void ErrorToRightCenter(string message, string topic = null, bool isShowMask = false, string token = "") => Error(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.RightCenter
+    });
+
+    /// <summary>
+    ///     错误 右下
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void ErrorToRightBottom(string message, string topic = null, bool isShowMask = false, string token = "") => Error(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.RightBottom
+    });
+
+
+    /// <summary>
+    ///     错误 左上
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    public static void ErrorGlobalToLeftTop(string message, string topic = null) => ErrorGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.LeftTop
+    });
+
+    /// <summary>
+    ///     错误 左中
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    public static void ErrorGlobalToLeftCenter(string message, string topic = null) => ErrorGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.LeftCenter
+    });
+
+    /// <summary>
+    ///     错误 左下
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    public static void ErrorGlobalToLeftBottom(string message, string topic = null) => ErrorGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.LeftBottom
+    });
+
+    /// <summary>
+    ///     错误 居中上方
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    public static void ErrorGlobalToCenterTop(string message, string topic = null) => ErrorGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.CenterTop
+    });
+
+    /// <summary>
+    ///     错误 居中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void ErrorGlobalToCenter(string message, string topic = null) => ErrorGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.Center
+    });
+
+    /// <summary>
+    ///     错误 居中下方
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void ErrorGlobalToCenterBottom(string message, string topic = null) => ErrorGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.CenterBottom
+    });
+
+    /// <summary>
+    ///     错误 右上
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void ErrorGlobalToRightTop(string message, string topic = null) => ErrorGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.RightTop
+    });
+
+    /// <summary>
+    ///     错误 右中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void ErrorGlobalToRightCenter(string message, string topic = null) => ErrorGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.RightCenter
+    });
+
+    /// <summary>
+    ///     错误 右下
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void ErrorGlobalToRightBottom(string message, string topic = null) => ErrorGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.RightBottom
+    });
+    #endregion 错误
+
+    #region 错误自动关闭
+
+    /// <summary>
+    ///     错误(自动关闭)
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="token"></param>
+    public static void ErrorAutoClose(string message, string topic = null, string token = "") => Error(new GrowlStrongInfo()
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        IsCustom = true,
+        StaysOpen = false,
+    });
+
+    /// <summary>
+    ///     错误(自动关闭)
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void ErrorGlobalAutoClose(string message, string topic = null) => ErrorGlobal(new GrowlStrongInfo()
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        IsCustom = true,
+        StaysOpen = false,
+    });
+
+    /// <summary>
+    ///     错误（自动关闭） 左上
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void ErrorAutoCloseToLeftTop(string message, string topic = null, bool isShowMask = false, string token = "") => Error(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.LeftTop,
+        IsCustom = true,
+        StaysOpen = false,
+    });
+
+    /// <summary>
+    ///     错误（自动关闭） 左中
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void ErrorAutoCloseToLeftCenter(string message, string topic = null, bool isShowMask = false, string token = "") => Error(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.LeftCenter,
+        IsCustom = true,
+        StaysOpen = false,
+    });
+
+    /// <summary>
+    ///     错误（自动关闭） 左下
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void ErrorAutoCloseToLeftBottom(string message, string topic = null, bool isShowMask = false, string token = "") => Error(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.LeftBottom,
+        IsCustom = true,
+        StaysOpen = false,
+    });
+
+    /// <summary>
+    ///     错误（自动关闭） 居中上方
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void ErrorAutoCloseToCenterTop(string message, string topic = null, bool isShowMask = false, string token = "") => Error(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.CenterTop,
+        IsCustom = true,
+        StaysOpen = false,
+    });
+
+    /// <summary>
+    ///     错误（自动关闭） 居中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void ErrorAutoCloseToCenter(string message, string topic = null, bool isShowMask = false, string token = "") => Error(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.Center,
+        IsCustom = true,
+        StaysOpen = false,
+    });
+
+    /// <summary>
+    ///     错误（自动关闭） 居中下方
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void ErrorAutoCloseToCenterBottom(string message, string topic = null, bool isShowMask = false, string token = "") => Error(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.CenterBottom,
+        IsCustom = true,
+        StaysOpen = false,
+    });
+
+    /// <summary>
+    ///     错误（自动关闭） 右上
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void ErrorAutoCloseToRightTop(string message, string topic = null, bool isShowMask = false, string token = "") => Error(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.RightTop,
+        IsCustom = true,
+        StaysOpen = false,
+    });
+
+    /// <summary>
+    ///     错误（自动关闭） 右中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void ErrorAutoCloseToRightCenter(string message, string topic = null, bool isShowMask = false, string token = "") => Error(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.RightCenter,
+        IsCustom = true,
+        StaysOpen = false,
+    });
+
+    /// <summary>
+    ///     错误（自动关闭） 右下
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void ErrorAutoCloseToRightBottom(string message, string topic = null, bool isShowMask = false, string token = "") => Error(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.RightBottom,
+        IsCustom = true,
+        StaysOpen = false,
+    });
+
+
+    /// <summary>
+    ///     错误（自动关闭） 左上
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    public static void ErrorAutoCloseGlobalToLeftTop(string message, string topic = null) => ErrorGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.LeftTop,
+        IsCustom = true,
+        StaysOpen = false,
+    });
+
+    /// <summary>
+    ///     错误（自动关闭） 左中
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    public static void ErrorAutoCloseGlobalToLeftCenter(string message, string topic = null) => ErrorGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.LeftCenter,
+        IsCustom = true,
+        StaysOpen = false,
+    });
+
+    /// <summary>
+    ///     错误（自动关闭） 左下
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    public static void ErrorAutoCloseGlobalToLeftBottom(string message, string topic = null) => ErrorGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.LeftBottom,
+        IsCustom = true,
+        StaysOpen = false,
+    });
+
+    /// <summary>
+    ///     错误（自动关闭） 居中上方
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    public static void ErrorAutoCloseGlobalToCenterTop(string message, string topic = null) => ErrorGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.CenterTop,
+        IsCustom = true,
+        StaysOpen = false,
+    });
+
+    /// <summary>
+    ///     错误（自动关闭） 居中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void ErrorAutoCloseGlobalToCenter(string message, string topic = null) => ErrorGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.Center,
+        IsCustom = true,
+        StaysOpen = false,
+    });
+
+    /// <summary>
+    ///     错误（自动关闭） 居中下方
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void ErrorAutoCloseGlobalToCenterBottom(string message, string topic = null) => ErrorGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.CenterBottom,
+        IsCustom = true,
+        StaysOpen = false,
+    });
+
+    /// <summary>
+    ///     错误（自动关闭） 右上
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void ErrorAutoCloseGlobalToRightTop(string message, string topic = null) => ErrorGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.RightTop,
+        IsCustom = true,
+        StaysOpen = false,
+    });
+
+    /// <summary>
+    ///     错误（自动关闭） 右中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void ErrorAutoCloseGlobalToRightCenter(string message, string topic = null) => ErrorGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.RightCenter,
+        IsCustom = true,
+        StaysOpen = false,
+    });
+
+    /// <summary>
+    ///     错误（自动关闭） 右下
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void ErrorAutoCloseGlobalToRightBottom(string message, string topic = null) => ErrorGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.RightBottom,
+        IsCustom = true,
+        StaysOpen = false,
+    });
+    #endregion 错误自动关闭
+
+    #region 严重
+    /// <summary>
+    ///     严重 左上
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void FatalToLeftTop(string message, string topic = null, bool isShowMask = false, string token = "") => Fatal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.LeftTop
+    });
+
+    /// <summary>
+    ///     严重 左中
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void FatalToLeftCenter(string message, string topic = null, bool isShowMask = false, string token = "") => Fatal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.LeftCenter
+    });
+
+    /// <summary>
+    ///     严重 左下
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void FatalToLeftBottom(string message, string topic = null, bool isShowMask = false, string token = "") => Fatal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.LeftBottom
+    });
+
+    /// <summary>
+    ///     严重 居中上方
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void FatalToCenterTop(string message, string topic = null, bool isShowMask = false, string token = "") => Fatal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.CenterTop
+    });
+
+    /// <summary>
+    ///     严重 居中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void FatalToCenter(string message, string topic = null, bool isShowMask = false, string token = "") => Fatal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.Center
+    });
+
+    /// <summary>
+    ///     严重 居中下方
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void FatalToCenterBottom(string message, string topic = null, bool isShowMask = false, string token = "") => Fatal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.CenterBottom
+    });
+
+    /// <summary>
+    ///     严重 右上
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void FatalToRightTop(string message, string topic = null, bool isShowMask = false, string token = "") => Fatal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.RightTop
+    });
+
+    /// <summary>
+    ///     严重 右中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void FatalToRightCenter(string message, string topic = null, bool isShowMask = false, string token = "") => Fatal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.RightCenter
+    });
+
+    /// <summary>
+    ///     严重 右下
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void FatalToRightBottom(string message, string topic = null, bool isShowMask = false, string token = "") => Fatal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.RightBottom
+    });
+
+
+    /// <summary>
+    ///     严重 左上
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    public static void FatalGlobalToLeftTop(string message, string topic = null) => FatalGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.LeftTop
+    });
+
+    /// <summary>
+    ///     严重 左中
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    public static void FatalGlobalToLeftCenter(string message, string topic = null) => FatalGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.LeftCenter
+    });
+
+    /// <summary>
+    ///     严重 左下
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    public static void FatalGlobalToLeftBottom(string message, string topic = null) => FatalGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.LeftBottom
+    });
+
+    /// <summary>
+    ///     严重 居中上方
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="topic">信息主题</param>
+    public static void FatalGlobalToCenterTop(string message, string topic = null) => FatalGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.CenterTop
+    });
+
+    /// <summary>
+    ///     严重 居中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void FatalGlobalToCenter(string message, string topic = null) => FatalGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.Center
+    });
+
+    /// <summary>
+    ///     严重 居中下方
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void FatalGlobalToCenterBottom(string message, string topic = null) => FatalGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.CenterBottom
+    });
+
+    /// <summary>
+    ///     严重 右上
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void FatalGlobalToRightTop(string message, string topic = null) => FatalGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.RightTop
+    });
+
+    /// <summary>
+    ///     严重 右中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void FatalGlobalToRightCenter(string message, string topic = null) => FatalGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.RightCenter
+    });
+
+    /// <summary>
+    ///     严重 右下
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="topic">信息主题</param>
+    public static void FatalGlobalToRightBottom(string message, string topic = null) => FatalGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ShowPosition = GrowlShowPosition.RightBottom
+    });
+    #endregion 严重
+
+    #region 询问
+
+    /// <summary>
+    ///     询问 左上
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="actionBeforeClose"></param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void AskToLeftTop(string message, Func<bool, bool> actionBeforeClose, string topic = null, bool isShowMask = false, string token = "") => Ask(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ActionBeforeClose = actionBeforeClose,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.LeftTop
+    });
+
+    /// <summary>
+    ///     询问 左中
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="actionBeforeClose"></param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void AskToLeftCenter(string message, Func<bool, bool> actionBeforeClose, string topic = null, bool isShowMask = false, string token = "") => Ask(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ActionBeforeClose = actionBeforeClose,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.LeftCenter
+    });
+
+    /// <summary>
+    ///     询问 左下
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="actionBeforeClose"></param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void AskToLeftBottom(string message, Func<bool, bool> actionBeforeClose, string topic = null, bool isShowMask = false, string token = "") => Ask(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ActionBeforeClose = actionBeforeClose,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.LeftBottom
+    });
+
+    /// <summary>
+    ///     询问 居中上方
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="actionBeforeClose"></param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask">是否显示遮罩</param>
+    /// <param name="token"></param>
+    public static void AskToCenterTop(string message, Func<bool, bool> actionBeforeClose, string topic = null, bool isShowMask = false, string token = "") => Ask(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ActionBeforeClose = actionBeforeClose,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.CenterTop
+    });
+
+    /// <summary>
+    ///     询问 居中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="actionBeforeClose"></param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void AskToCenter(string message, Func<bool, bool> actionBeforeClose, string topic = null, bool isShowMask = false, string token = "") => Ask(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ActionBeforeClose = actionBeforeClose,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.Center
+    });
+
+    /// <summary>
+    ///     询问 居中下方
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="actionBeforeClose"></param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void AskToCenterBottom(string message, Func<bool, bool> actionBeforeClose, string topic = null, bool isShowMask = false, string token = "") => Ask(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ActionBeforeClose = actionBeforeClose,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.CenterBottom
+    });
+
+    /// <summary>
+    ///     询问 右上
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="actionBeforeClose"></param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void AskToRightTop(string message, Func<bool, bool> actionBeforeClose, string topic = null, bool isShowMask = false, string token = "") => Ask(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ActionBeforeClose = actionBeforeClose,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.RightTop
+    });
+
+    /// <summary>
+    ///     询问 右中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="actionBeforeClose"></param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void AskToRightCenter(string message, Func<bool, bool> actionBeforeClose, string topic = null, bool isShowMask = false, string token = "") => Ask(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ActionBeforeClose = actionBeforeClose,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.RightCenter
+    });
+
+    /// <summary>
+    ///     询问 右下
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="actionBeforeClose"></param>
+    /// <param name="topic">信息主题</param>
+    /// <param name="isShowMask"></param>
+    /// <param name="token"></param>
+    public static void AskToRightBottom(string message, Func<bool, bool> actionBeforeClose, string topic = null, bool isShowMask = false, string token = "") => Ask(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ActionBeforeClose = actionBeforeClose,
+        Token = token,
+        ShowMask = isShowMask,
+        ShowPosition = GrowlShowPosition.RightBottom
+    });
+
+
+    /// <summary>
+    ///     询问 左上
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="actionBeforeClose"></param>
+    /// <param name="topic">信息主题</param>
+    public static void AskGlobalToLeftTop(string message, Func<bool, bool> actionBeforeClose, string topic = null) => AskGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ActionBeforeClose = actionBeforeClose,
+        ShowPosition = GrowlShowPosition.LeftTop
+    });
+
+    /// <summary>
+    ///     询问 左中
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="actionBeforeClose"></param>
+    /// <param name="topic">信息主题</param>
+    public static void AskGlobalToLeftCenter(string message, Func<bool, bool> actionBeforeClose, string topic = null) => AskGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ActionBeforeClose = actionBeforeClose,
+        ShowPosition = GrowlShowPosition.LeftCenter
+    });
+
+    /// <summary>
+    ///     询问 左下
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="actionBeforeClose"></param>
+    /// <param name="topic">信息主题</param>
+    public static void AskGlobalToLeftBottom(string message, Func<bool, bool> actionBeforeClose, string topic = null) => AskGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ActionBeforeClose = actionBeforeClose,
+        ShowPosition = GrowlShowPosition.LeftBottom
+    });
+
+    /// <summary>
+    ///     询问 居中上方
+    /// </summary>
+    /// <param name="message">提示信息</param>
+    /// <param name="actionBeforeClose"></param>
+    /// <param name="topic">信息主题</param>
+    public static void AskGlobalToCenterTop(string message, Func<bool, bool> actionBeforeClose, string topic = null) => AskGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ActionBeforeClose = actionBeforeClose,
+        ShowPosition = GrowlShowPosition.CenterTop
+    });
+
+    /// <summary>
+    ///     询问 居中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="actionBeforeClose"></param>
+    /// <param name="topic">信息主题</param>
+    public static void AskGlobalToCenter(string message, Func<bool, bool> actionBeforeClose, string topic = null) => AskGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ActionBeforeClose = actionBeforeClose,
+        ShowPosition = GrowlShowPosition.Center
+    });
+
+    /// <summary>
+    ///     询问 居中下方
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="actionBeforeClose"></param>
+    /// <param name="topic">信息主题</param>
+    public static void AskGlobalToCenterBottom(string message, Func<bool, bool> actionBeforeClose, string topic = null) => AskGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ActionBeforeClose = actionBeforeClose,
+        ShowPosition = GrowlShowPosition.CenterBottom
+    });
+
+    /// <summary>
+    ///     询问 右上
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="actionBeforeClose"></param>
+    /// <param name="topic">信息主题</param>
+    public static void AskGlobalToRightTop(string message, Func<bool, bool> actionBeforeClose, string topic = null) => AskGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ActionBeforeClose = actionBeforeClose,
+        ShowPosition = GrowlShowPosition.RightTop
+    });
+
+    /// <summary>
+    ///     询问 右中
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="actionBeforeClose"></param>
+    /// <param name="topic">信息主题</param>
+    public static void AskGlobalToRightCenter(string message, Func<bool, bool> actionBeforeClose, string topic = null) => AskGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ActionBeforeClose = actionBeforeClose,
+        ShowPosition = GrowlShowPosition.RightCenter
+    });
+
+    /// <summary>
+    ///     询问 右下
+    /// </summary>
+    /// <param name="message">信息内容</param>
+    /// <param name="actionBeforeClose"></param>
+    /// <param name="topic">信息主题</param>
+    public static void AskGlobalToRightBottom(string message, Func<bool, bool> actionBeforeClose, string topic = null) => AskGlobal(new GrowlStrongInfo
+    {
+        Message = (string.IsNullOrEmpty(topic) ? "" : $"[{topic}] ") + message,
+        ActionBeforeClose = actionBeforeClose,
+        ShowPosition = GrowlShowPosition.RightBottom
+    });
+    #endregion 询问
+
     #endregion 弹出位置的扩展方法
 
     private void ButtonClose_OnClick(object sender, RoutedEventArgs e) => Close(false);
@@ -829,7 +2719,7 @@ public class GrowlStrong : Growl
     ///     清除
     /// </summary>
     /// <param name="token"></param>
-    public new static void Clear(string token = "")
+    public static void Clear(string token = "")
     {
         if (!string.IsNullOrEmpty(token))
         {
@@ -856,7 +2746,7 @@ public class GrowlStrong : Growl
     /// <summary>
     ///     清除
     /// </summary>
-    public new static void ClearGlobal()
+    public static void ClearGlobal()
     {
         if (GrowlStrongWindow == null) return;
         foreach (var item in GrowlStrongWindow.GrowlPanel)
